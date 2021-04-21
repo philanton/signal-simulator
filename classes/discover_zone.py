@@ -19,4 +19,4 @@ class DiscoverZone(qtw.QWidget):
         palette = self.palette()
         palette.setColor(qtg.QPalette.Window, qtg.QColor("magenta"))
         self.setPalette(palette)
-        self.setMinimumWidth(160)
+        self.setMinimumWidth(300)
