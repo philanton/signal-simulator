@@ -1,5 +1,8 @@
 import PySide6.QtWidgets as qtw
 import PySide6.QtGui as qtg
+from PySide6.QtCore import Qt
+
+from classes.blocks.basic_block import BasicBlock
 
 
 class BlockZone(qtw.QWidget):
@@ -16,7 +19,22 @@ class BlockZone(qtw.QWidget):
             qtw.QSizePolicy.MinimumExpanding
         )
 
+        self.setAcceptDrops(True)
+
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(qtg.QPalette.Window, qtg.QColor("cyan"))
         self.setPalette(palette)
+
+    def dragEnterEvent(self, e):
+        """Accept creating new blocks"""
+        e.accept()
+
+    def dropEvent(self, e):
+        """Create new block where mouse drops"""
+        block = BasicBlock(self)
+        block.setText("New Block")
+        block.show()
+
+        e.setDropAction(Qt.MoveAction)
+        e.accept()

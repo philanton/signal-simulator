@@ -1,4 +1,6 @@
 import PySide6.QtWidgets as qtw
+import PySide6.QtCore as qtc
+import PySide6.QtGui as qtg
 from PySide6.QtCore import Qt
 
 class BasicBlock(qtw.QLabel):
@@ -21,3 +23,16 @@ class BasicBlock(qtw.QLabel):
         """)
         self.setFixedSize(80, 60)
         self.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+
+    def mouseMoveEvent(self, e):
+
+        if e.buttons() != Qt.LeftButton:
+            return
+
+        mimeData = qtc.QMimeData()
+
+        drag = qtg.QDrag(self)
+        drag.setMimeData(mimeData)
+        drag.setHotSpot(e.pos() - self.rect().topLeft())
+
+        dropAction = drag.exec_(Qt.MoveAction)
