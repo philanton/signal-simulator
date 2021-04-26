@@ -34,6 +34,7 @@ class BlockZone(qtw.QWidget):
         """Create new block where mouse drops"""
         block = BasicBlock(self)
         block.setText("New Block")
+        block.move(e.pos())
         block.show()
 
         e.setDropAction(Qt.MoveAction)

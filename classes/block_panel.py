@@ -1,4 +1,5 @@
 import PySide6.QtWidgets as qtw
+import PySide6.QtGui as qtg
 from PySide6.QtCore import Qt
 from classes.blocks.basic_block import BasicBlock
 
@@ -11,9 +12,6 @@ class BlockPanel(qtw.QWidget):
 
     def init_gui(self):
         """Separate function for GUI initialization"""
-        self.setStyleSheet("""
-            background-color: yellow;
-        """)
 
         horizontal_layout = qtw.QHBoxLayout()
         horizontal_layout.setContentsMargins(1, 1, 1, 1)
@@ -26,3 +24,8 @@ class BlockPanel(qtw.QWidget):
             horizontal_layout.addWidget(block)
         horizontal_layout.addStretch(1)
         self.setLayout(horizontal_layout)
+
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        palette.setColor(qtg.QPalette.Window, qtg.QColor("black"))
+        self.setPalette(palette)

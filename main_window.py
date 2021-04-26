@@ -1,6 +1,7 @@
 import sys
 
 import PySide6.QtWidgets as qtw
+import PySide6.QtGui as qtg
 
 from classes.block_panel import BlockPanel
 from classes.working_zone import WorkingZone
@@ -21,6 +22,11 @@ class MainWindow(qtw.QMainWindow):
         vertical_layout.addWidget(WorkingZone(central_widget))
         central_widget.setLayout(vertical_layout)
         self.setCentralWidget(central_widget)
+
+        central_widget.setAutoFillBackground(True)
+        palette = central_widget.palette()
+        palette.setColor(qtg.QPalette.Window, qtg.QColor("green"))
+        central_widget.setPalette(palette)
 
         self.setMinimumSize(720, 480)
         self.show()

@@ -33,6 +33,6 @@ class BasicBlock(qtw.QLabel):
 
         drag = qtg.QDrag(self)
         drag.setMimeData(mimeData)
-        drag.setHotSpot(e.pos() - self.rect().topLeft())
+        # drag.setHotSpot(e.pos() - self.rect().topLeft())
 
         dropAction = drag.exec_(Qt.MoveAction)
