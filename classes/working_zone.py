@@ -19,10 +19,16 @@ class WorkingZone(qtw.QWidget):
             qtw.QSizePolicy.MinimumExpanding
         )
 
+
         horizontal_layout = qtw.QHBoxLayout()
-        horizontal_layout.addWidget(BlockZone(self))
+
+        block_zone = qtw.QScrollArea(self)
+        block_zone.setWidget(BlockZone())
+        horizontal_layout.addWidget(block_zone)
+        
         horizontal_layout.addWidget(DiscoverZone(self))
         self.setLayout(horizontal_layout)
+
 
         self.setAutoFillBackground(True)
         palette = self.palette()
