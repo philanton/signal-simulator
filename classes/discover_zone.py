@@ -1,27 +1,28 @@
 import PySide6.QtWidgets as qtw
 import PySide6.QtGui as qtg
 
+from classes.basewidget import BaseWidget
 from classes.research.monitor import Monitor
 from classes.research.element_list import ElementList
 
 
-class DiscoverZone(qtw.QWidget):
+class DiscoverZone(BaseWidget):
     """It's a zone, where we can monitor info"""
-
     def __init__(self, parent=None):
-        super().__init__()
+        super().__init__(parent)
         self.init_gui()
 
     def init_gui(self):
         """Separate function for GUI initialization"""
+        self._init_sizing(width=300)
 
-        vertical_layout = qtw.QVBoxLayout()
-        vertical_layout.addWidget(Monitor())
-        vertical_layout.addWidget(ElementList())
-        self.setLayout(vertical_layout)
+        monitor = Monitor()
+        element_list = ElementList()
+        self._init_layout([
+            monitor,
+            element_list
+        ])
 
-        self.setAutoFillBackground(True)
-        palette = self.palette()
-        palette.setColor(qtg.QPalette.Window, qtg.QColor("magenta"))
-        self.setPalette(palette)
-        self.setMinimumWidth(300)
+        self._init_palette({
+            qtg.QPalette.Window: qtg.QColor("magenta")
+        })

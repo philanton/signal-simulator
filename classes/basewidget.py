@@ -10,6 +10,9 @@ class BaseWidget(qtw.QWidget):
     def __init__(self, parent):
         super().__init__(parent)
 
+    def init_gui(self):
+        pass
+
     def _init_layout(self, inner_widgets, is_vertical=True,
                      margins=(0,0,0,0), spacing=0):
         """"""
@@ -35,12 +38,11 @@ class BaseWidget(qtw.QWidget):
 
     def _init_sizing(self, size_policy=(), width=(), height=()):
         """"""
-        def set_size_by_property_length(set_size=lambda: pass, property):
-            if len(property) == 0:
-                pass
-            elif len(property) == 1:
-                set_size(property[0], property[0])
-            else:
+        def set_size_by_property_length(set_size=lambda: 0, property=()):
+            if not property: return
+            if type(property) is int:
+                set_size(property, property)
+            elif type(property) is tuple:
                 set_size(property[0], property[1])
 
         set_size_by_property_length(lambda a, b: self.setSizePolicy(a, b),
@@ -50,10 +52,10 @@ class BaseWidget(qtw.QWidget):
         set_size_by_property_length(lambda a, b: self._set_height(a, b),
                                     height)
 
-    def _set_width(min, max):
+    def _set_width(self, min, max):
         self.setMinimumWidth(min)
         self.setMaximumWidth(max)
 
-    def _set_height(min, max):
+    def _set_height(self, min, max):
         self.setMinimumHeight(min)
         self.setMaximumHeight(max)

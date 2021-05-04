@@ -2,31 +2,33 @@ import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 import PySide6.QtGui as qtg
 
+from classes.basewidget import BaseWidget
 
-class ElementListItem(qtw.QWidget):
+
+class ElementListItem(BaseWidget):
     """It's a list item with set of options for selected element"""
-
     def __init__(self, element=None, is_header=False, parent=None):
-        super().__init__()
+        super().__init__(parent)
         self.is_header = is_header
         self.element = element
         self.init_gui()
 
     def init_gui(self):
         """Separate function for GUI initialization"""
+        self._init_layout(
+            [
+                self.get_index(),
+                self.get_name(),
+                self.get_colour(),
+                self.get_show()
+            ],
+            is_vertical=False,
+            margins=(1,1,1,1)
+        )
 
-        self.horizontal_layout = qtw.QHBoxLayout()
-        self.horizontal_layout.setContentsMargins(1,1,1,1)
-        self.horizontal_layout.addWidget(self.get_index())
-        self.horizontal_layout.addWidget(self.get_name())
-        self.horizontal_layout.addWidget(self.get_colour())
-        self.horizontal_layout.addWidget(self.get_show())
-        self.setLayout(self.horizontal_layout)
-
-        self.setAutoFillBackground(True)
-        palette = self.palette()
-        palette.setColor(qtg.QPalette.Window, qtg.QColor("skyblue"))
-        self.setPalette(palette)
+        self._init_palette({
+            qtg.QPalette.Window: qtg.QColor("skyblue")
+        })
 
     def get_index(self):
         index = qtw.QLabel()
