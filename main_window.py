@@ -3,35 +3,48 @@ import sys
 import PySide6.QtWidgets as qtw
 import PySide6.QtGui as qtg
 
+from classes.basewidget import BaseWidget
 from classes.block_panel import BlockPanel
 from classes.working_zone import WorkingZone
 
+
 class MainWindow(qtw.QMainWindow):
     """It's a main page of app"""
-
     def __init__(self):
         super().__init__()
-        self.init_gui()
-
-    def init_gui(self):
-        """Separate function for GUI initialization"""
-        central_widget = qtw.QWidget(self)
-        vertical_layout = qtw.QVBoxLayout(central_widget)
-        vertical_layout.setContentsMargins(0, 0, 0, 0)
-        vertical_layout.addWidget(BlockPanel(central_widget))
-        vertical_layout.addWidget(WorkingZone(central_widget))
-        central_widget.setLayout(vertical_layout)
-        self.setCentralWidget(central_widget)
-
-        central_widget.setAutoFillBackground(True)
-        palette = central_widget.palette()
-        palette.setColor(qtg.QPalette.Window, qtg.QColor("green"))
-        central_widget.setPalette(palette)
+        self.central_widget = MainWidget(self)
+        self.setCentralWidget(self.central_widget)
 
         self.setMinimumSize(720, 480)
         self.show()
 
+
+class MainWidget(BaseWidget):
+    """Inner main widget for main window."""
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.init_gui()
+
+    def init_gui(self):
+        """Separate function for GUI initialization"""
+        block_panel = BlockPanel(self)
+        working_zone = WorkingZone(self)
+        self._init_layout(
+            [
+                block_panel,
+                working_zone
+            ],
+            margins=(5,5,5,5),
+            spacing=5
+        )
+
+        self._init_palette({
+            qtg.QPalette.Window: qtg.QColor("#374B4A")
+        })
+
+
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
     main_window = MainWindow()
+    app.setStyle('Fusion')
     app.exec_()

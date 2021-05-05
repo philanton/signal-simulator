@@ -15,5 +15,5 @@ class Monitor(BaseWidget):
         self._init_sizing(height=200)
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("red")
+            qtg.QPalette.Window: qtg.QColor("#526760")
         })

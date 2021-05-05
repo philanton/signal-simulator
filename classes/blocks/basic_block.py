@@ -14,9 +14,9 @@ class BasicBlock(qtw.QLabel):
         """Separate function for GUI initialization"""
 
         self.setStyleSheet("""
-            border: 3px solid blue;
-            background-color: yellow;
-            color: blue;
+            border: 3px solid #88D9E6;
+            background-color: #C5FFFD;
+            color: #88D9E6;
             border-radius: 3px;
             font-family: monospace;
             font-size: 16px;

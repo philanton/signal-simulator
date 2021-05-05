@@ -5,7 +5,7 @@ import PySide6.QtGui as qtg
 from classes.basewidget import BaseWidget
 
 
-class ElementListItem(BaseWidget):
+class ElementListRow(BaseWidget):
     """It's a list item with set of options for selected element"""
     def __init__(self, element=None, is_header=False, parent=None):
         super().__init__(parent)
@@ -27,7 +27,9 @@ class ElementListItem(BaseWidget):
         )
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("skyblue")
+            qtg.QPalette.Window: qtg.QColor(
+                "#8B8BAE" if self.is_header else "#C5FFFD"
+            )
         })
 
     def get_index(self):

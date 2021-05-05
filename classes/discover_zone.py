@@ -18,11 +18,15 @@ class DiscoverZone(BaseWidget):
 
         monitor = Monitor()
         element_list = ElementList()
-        self._init_layout([
-            monitor,
-            element_list
-        ])
+        self._init_layout(
+            [
+                monitor,
+                element_list
+            ],
+            margins=(5,5,5,5),
+            spacing=5
+        )
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("magenta")
+            qtg.QPalette.Window: qtg.QColor("#374B4A")
         })

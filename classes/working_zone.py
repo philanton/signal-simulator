@@ -28,9 +28,11 @@ class WorkingZone(BaseWidget):
                 block_zone,
                 discover_zone
             ],
-            is_vertical=False
+            is_vertical=False,
+            margins=(5,5,5,5),
+            spacing=5
         )
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("black")
+            qtg.QPalette.Window: qtg.QColor("#526760")
         })

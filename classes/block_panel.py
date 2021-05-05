@@ -15,10 +15,10 @@ class BlockPanel(BaseWidget):
         self._init_layout(
             [BasicBlock(), ""],
             is_vertical=False,
-            margins=(1,1,1,1),
+            margins=(5,5,5,5),
             spacing=5
         )
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("black")
+            qtg.QPalette.Window: qtg.QColor("#526760")
         })

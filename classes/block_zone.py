@@ -25,7 +25,7 @@ class BlockZone(BaseWidget):
         self._init_layout()
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("cyan")
+            qtg.QPalette.Window: qtg.QColor("#8B8BAE")
         })
 
     def dragEnterEvent(self, e):
@@ -45,7 +45,7 @@ class BlockZone(BaseWidget):
     def _init_layout(self):
 
         self.grid = qtw.QGridLayout()
-        self.grid.setContentsMargins(2, 2, 2, 2)
+        self.grid.setContentsMargins(5, 5, 5, 5)
         self.grid.setVerticalSpacing(2)
         self.grid.setHorizontalSpacing(2)
 
@@ -57,7 +57,7 @@ class BlockZone(BaseWidget):
                 cell.setFixedSize(cell_s, cell_s)
                 cell.setAutoFillBackground(True)
                 palette = cell.palette()
-                palette.setColor(qtg.QPalette.Window, qtg.QColor("white"))
+                palette.setColor(qtg.QPalette.Window, qtg.QColor("#C5FFFD"))
                 cell.setPalette(palette)
                 self.grid.addWidget(cell, i, j)
 

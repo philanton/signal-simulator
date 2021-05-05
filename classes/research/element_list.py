@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt
 import PySide6.QtGui as qtg
 
 from classes.basewidget import BaseWidget
-from classes.research.element_list_item import ElementListItem
+from classes.research.element_list_item import ElementListRow
 
 
 class ElementList(BaseWidget):
@@ -38,12 +38,12 @@ class ElementList(BaseWidget):
                 list_item_1,
                 list_item_2
             ],
-            margins=(1,1,1,1),
+            margins=(5,5,5,5),
             spacing=5
         )
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("blue")
+            qtg.QPalette.Window: qtg.QColor("#88D9E6")
         })
 
     def get_description(self):
