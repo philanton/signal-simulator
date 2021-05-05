@@ -1,6 +1,4 @@
 import PySide6.QtWidgets as qtw
-from PySide6.QtCore import Qt
-import PySide6.QtGui as qtg
 
 
 class BaseWidget(qtw.QWidget):
@@ -14,7 +12,7 @@ class BaseWidget(qtw.QWidget):
         pass
 
     def _init_layout(self, inner_widgets, is_vertical=True,
-                     margins=(0,0,0,0), spacing=0):
+                     margins=(0, 0, 0, 0), spacing=0):
         """"""
         self._layout = qtw.QVBoxLayout() if is_vertical else qtw.QHBoxLayout()
         self._layout.setContentsMargins(*margins)
@@ -39,7 +37,8 @@ class BaseWidget(qtw.QWidget):
     def _init_sizing(self, size_policy=(), width=(), height=()):
         """"""
         def set_size_by_property_length(set_size=lambda: 0, property=()):
-            if not property: return
+            if not property:
+                return
             if type(property) is int:
                 set_size(property, property)
             elif type(property) is tuple:

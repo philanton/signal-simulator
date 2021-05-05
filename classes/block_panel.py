@@ -17,7 +17,7 @@ class BlockPanel(BaseWidget):
         self._init_layout(
             block_widgets + [""],
             is_vertical=False,
-            margins=(5,5,5,5),
+            margins=(5, 5, 5, 5),
             spacing=5
         )
 

@@ -1,5 +1,4 @@
 import PySide6.QtWidgets as qtw
-from PySide6.QtCore import Qt
 import PySide6.QtGui as qtg
 
 from classes.basewidget import BaseWidget
@@ -23,7 +22,7 @@ class ElementListRow(BaseWidget):
                 self.get_show()
             ],
             is_vertical=False,
-            margins=(1,1,1,1)
+            margins=(1, 1, 1, 1)
         )
 
         self._init_palette({

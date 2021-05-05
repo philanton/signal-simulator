@@ -29,7 +29,7 @@ class WorkingZone(BaseWidget):
                 discover_zone
             ],
             is_vertical=False,
-            margins=(5,5,5,5),
+            margins=(5, 5, 5, 5),
             spacing=5
         )
 

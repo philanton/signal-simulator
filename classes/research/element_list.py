@@ -1,5 +1,4 @@
 import PySide6.QtWidgets as qtw
-from PySide6.QtCore import Qt
 import PySide6.QtGui as qtg
 
 from classes.basewidget import BaseWidget
@@ -37,7 +36,7 @@ class ElementList(BaseWidget):
                 list_item_2,
                 ""
             ],
-            margins=(5,5,5,5),
+            margins=(5, 5, 5, 5),
             spacing=5
         )
 

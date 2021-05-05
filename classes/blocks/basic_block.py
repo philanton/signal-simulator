@@ -38,4 +38,4 @@ class BasicBlock(qtw.QLabel):
         drag.setMimeData(mimeData)
         drag.setPixmap(qtg.QPixmap("img/block-plus.png"))
 
-        dropAction = drag.exec_(Qt.MoveAction)
+        drag.exec_(Qt.MoveAction)

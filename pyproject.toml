@@ -10,6 +10,8 @@ python = ">=3.9,<3.10"
 
 [tool.poetry.dev-dependencies]
 PySide6 = "^6.0.3"
+flake8 = "^3.9.1"
+pep8-naming = "^0.11.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

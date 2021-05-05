@@ -34,7 +34,7 @@ class MainWidget(BaseWidget):
                 block_panel,
                 working_zone
             ],
-            margins=(5,5,5,5),
+            margins=(5, 5, 5, 5),
             spacing=5
         )
 
