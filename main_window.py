@@ -1,7 +1,7 @@
 import sys
 
-import PySide6.QtWidgets as qtw
 import PySide6.QtGui as qtg
+import PySide6.QtWidgets as qtw
 
 from classes.basewidget import BaseWidget
 from classes.block_panel import BlockPanel

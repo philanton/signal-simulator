@@ -1,6 +1,7 @@
 import PySide6.QtGui as qtg
-from classes.blocks.basic_block import BasicBlock
+
 from classes.basewidget import BaseWidget
+from classes.blocks.basic_block import BasicBlock
 from classes.blocks.config import blocks
 
 

@@ -1,5 +1,5 @@
-import PySide6.QtWidgets as qtw
 import PySide6.QtGui as qtg
+import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 
 from classes.basewidget import BaseWidget

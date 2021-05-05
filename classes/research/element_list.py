@@ -1,5 +1,5 @@
-import PySide6.QtWidgets as qtw
 import PySide6.QtGui as qtg
+import PySide6.QtWidgets as qtw
 
 from classes.basewidget import BaseWidget
 from classes.research.element_list_item import ElementListRow

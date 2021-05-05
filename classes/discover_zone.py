@@ -1,8 +1,8 @@
 import PySide6.QtGui as qtg
 
 from classes.basewidget import BaseWidget
-from classes.research.monitor import Monitor
 from classes.research.element_list import ElementList
+from classes.research.monitor import Monitor
 
 
 class DiscoverZone(BaseWidget):
