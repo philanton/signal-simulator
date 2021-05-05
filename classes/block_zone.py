@@ -34,8 +34,7 @@ class BlockZone(BaseWidget):
 
     def dropEvent(self, e):
         """Create new block where mouse drops"""
-        block = BasicBlock(self)
-        block.setText("New Block")
+        block = BasicBlock(e.mimeData().text(), self)
         block.move(e.pos())
         block.show()
 
