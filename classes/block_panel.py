@@ -3,7 +3,7 @@ import PySide6.QtGui as qtg
 from PySide6.QtCore import Qt
 
 from classes.basewidgets import BaseWidget, BlockView
-from classes.blocks.config import blocks
+from classes.config import blocks
 
 
 class BlockPanel(BaseWidget):

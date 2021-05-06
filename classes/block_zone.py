@@ -1,9 +1,12 @@
+from collections import Counter
+
 import PySide6.QtCore as qtc
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 
 from classes.basewidgets import BaseWidget, BlockView
+from classes.config import blocks
 from classes.modals import BaseModal
 
 
@@ -13,6 +16,8 @@ class BlockZone(BaseWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.init_gui()
+
+        self.index_rules = Counter([block["abbr"] for block in blocks])
 
     def init_gui(self):
         """Separate function for GUI initialization"""
@@ -34,7 +39,12 @@ class BlockZone(BaseWidget):
         e.accept()
 
     def create_block(self, name="", from_block=None):
+        block_id = f"{name.lower()}_{self.index_rules.get(name)}"
+        block_config = [conf for conf in blocks if conf["abbr"] == name][0]
+        block_config.update({ "id": block_id })
+
         block = from_block if from_block else GridBlockView(name)
+
         self.grid.addWidget(
             block,
             self.block_pos[0] - 1,
