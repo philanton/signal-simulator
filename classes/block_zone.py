@@ -20,9 +20,9 @@ class BlockZone(BaseWidget):
             qtw.QSizePolicy.MinimumExpanding
         ))
 
-        self.setAcceptDrops(True)
+        self._init_grid_layout()
 
-        self._init_layout()
+        self.setAcceptDrops(True)
 
         self._init_palette({
             qtg.QPalette.Window: qtg.QColor("#8B8BAE")
@@ -32,32 +32,87 @@ class BlockZone(BaseWidget):
         """Accept creating new blocks"""
         e.accept()
 
-    def dropEvent(self, e):
-        """Create new block where mouse drops"""
-        block = BasicBlock(e.mimeData().text(), self)
-        block.move(e.pos())
-        block.show()
+    def hover_in(self, cell_pos):
+        self.set_3x3_position(cell_pos)
+        self.hover()
 
-        e.setDropAction(Qt.MoveAction)
-        e.accept()
+    def hover_out(self):
+        self.hover(leaves=True)
 
-    def _init_layout(self):
+    def hover(self, leaves=False):
+        x_from, x_to = self.hover_block_pos[0] - 1, self.hover_block_pos[0] + 2
+        y_from, y_to = self.hover_block_pos[1] - 1, self.hover_block_pos[1] + 2
+
+        for x in range(x_from, x_to):
+            for y in range(y_from, y_to):
+                current_cell = self.grid.itemAtPosition(x, y).widget()
+                current_cell.change_cell_colour(leaves=leaves)
+
+    def set_3x3_position(self, position):
+        x = self.block_index_hint["x"].get(position[0], position[0])
+        y = self.block_index_hint["y"].get(position[1], position[1])
+
+        self.hover_block_pos = (x, y)
+
+    def _init_grid_layout(self):
+        """"""
+        self.margins = (5, 5, 5, 5)
+        self.spacing = 2
+        self.grid_shape = (100, 100)
+        self.block_index_hint = {
+            "x": {
+                0: 1,
+                self.grid_shape[0] - 1: self.grid_shape[0] - 2
+            },
+            "y": {
+                0: 1,
+                self.grid_shape[1] - 1: self.grid_shape[1] - 2
+            }
+        }
 
         self.grid = qtw.QGridLayout()
-        self.grid.setContentsMargins(5, 5, 5, 5)
-        self.grid.setVerticalSpacing(2)
-        self.grid.setHorizontalSpacing(2)
+        self.grid.setContentsMargins(*self.margins)
+        self.grid.setVerticalSpacing(self.spacing)
+        self.grid.setHorizontalSpacing(self.spacing)
 
-        cell_s = 15
-
-        for i in range(100):
-            for j in range(100):
-                cell = qtw.QWidget()
-                cell.setFixedSize(cell_s, cell_s)
-                cell.setAutoFillBackground(True)
-                palette = cell.palette()
-                palette.setColor(qtg.QPalette.Window, qtg.QColor("#C5FFFD"))
-                cell.setPalette(palette)
+        for i in range(self.grid_shape[1]):
+            for j in range(self.grid_shape[0]):
+                cell = GridCell((i, j))
                 self.grid.addWidget(cell, i, j)
 
         self.setLayout(self.grid)
+
+
+class GridCell(BaseWidget):
+    """Class for every cell in the grid."""
+    def __init__(self, grid_pos, parent=None):
+        super().__init__(parent)
+        self.grid_pos = grid_pos
+        self.size = 15
+
+        self.setAcceptDrops(True)
+
+        self._init_sizing(width=self.size, height=self.size)
+        self.change_cell_colour(leaves=True)
+
+    def change_cell_colour(self, leaves=False):
+        """"""
+        colour = "#C5FFFD" if leaves else "#88D9E6"
+        self._init_palette({
+            qtg.QPalette.Window: qtg.QColor(colour)
+        })
+
+    def dragEnterEvent(self, e):
+        """Accept creating new blocks"""
+        self.parent().hover_in(self.grid_pos)
+        e.accept()
+
+    def dragLeaveEvent(self, e):
+        """Accept creating new blocks"""
+        self.parent().hover_out()
+        e.accept()
+
+    def dropEvent(self, e):
+        """Create new block where mouse drops"""
+        e.setDropAction(Qt.MoveAction)
+        e.accept()
