@@ -4,6 +4,7 @@ import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 
 from classes.basewidgets import BaseWidget, BlockView
+from classes.modals import BaseModal
 
 
 class BlockZone(BaseWidget):
@@ -99,6 +100,12 @@ class GridBlockView(BlockView):
         super().__init__(name, parent)
         self.name = name
         self.init_gui()
+
+    def mouseDoubleClickEvent(self, e):
+        """Invoke modal window with set of options"""
+        modal = BaseModal()
+        if modal.exec_():
+            print(modal.options)
 
     def _mouseMoveEvent(self, e):
         """Event for dragging out block to the Block Zone"""
