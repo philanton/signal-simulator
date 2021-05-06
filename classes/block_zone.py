@@ -1,9 +1,9 @@
+import PySide6.QtCore as qtc
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 
-from classes.basewidget import BaseWidget
-from classes.blocks.basic_block import BasicBlock
+from classes.basewidgets import BaseWidget, BlockView
 
 
 class BlockZone(BaseWidget):
@@ -32,27 +32,37 @@ class BlockZone(BaseWidget):
         """Accept creating new blocks"""
         e.accept()
 
+    def create_block(self, name="", from_block=None):
+        block = from_block if from_block else GridBlockView(name)
+        self.grid.addWidget(
+            block,
+            self.block_pos[0] - 1,
+            self.block_pos[1] - 1,
+            3,
+            3
+        )
+
     def hover_in(self, cell_pos):
-        self.set_3x3_position(cell_pos)
-        self.hover()
+        self.__set_3x3_position(cell_pos)
+        self.__hover()
 
     def hover_out(self):
-        self.hover(leaves=True)
+        self.__hover(leaves=True)
 
-    def hover(self, leaves=False):
-        x_from, x_to = self.hover_block_pos[0] - 1, self.hover_block_pos[0] + 2
-        y_from, y_to = self.hover_block_pos[1] - 1, self.hover_block_pos[1] + 2
+    def __hover(self, leaves=False):
+        x_from, x_to = self.block_pos[0] - 1, self.block_pos[0] + 2
+        y_from, y_to = self.block_pos[1] - 1, self.block_pos[1] + 2
 
         for x in range(x_from, x_to):
             for y in range(y_from, y_to):
                 current_cell = self.grid.itemAtPosition(x, y).widget()
                 current_cell.change_cell_colour(leaves=leaves)
 
-    def set_3x3_position(self, position):
+    def __set_3x3_position(self, position):
         x = self.block_index_hint["x"].get(position[0], position[0])
         y = self.block_index_hint["y"].get(position[1], position[1])
 
-        self.hover_block_pos = (x, y)
+        self.block_pos = (x, y)
 
     def _init_grid_layout(self):
         """"""
@@ -81,6 +91,27 @@ class BlockZone(BaseWidget):
                 self.grid.addWidget(cell, i, j)
 
         self.setLayout(self.grid)
+
+
+class GridBlockView(BlockView):
+    """View for block in Block Panel"""
+    def __init__(self, name, parent=None):
+        super().__init__(name, parent)
+        self.name = name
+        self.init_gui()
+
+    def _mouseMoveEvent(self, e):
+        """Event for dragging out block to the Block Zone"""
+        if e.buttons() != Qt.LeftButton:
+            return
+
+        mimeData = qtc.QMimeData()
+        mimeData.setText(self.text)
+
+        drag = qtg.QDrag(self)
+        drag.setMimeData(mimeData)
+        drag.setPixmap(qtg.QPixmap("img/block-plus.png"))
+        drag.exec_(Qt.MoveAction)
 
 
 class GridCell(BaseWidget):
@@ -114,5 +145,8 @@ class GridCell(BaseWidget):
 
     def dropEvent(self, e):
         """Create new block where mouse drops"""
+        name = e.mimeData().text()
+        self.parent().create_block(name)
+
         e.setDropAction(Qt.MoveAction)
         e.accept()

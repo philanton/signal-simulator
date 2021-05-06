@@ -1,6 +1,6 @@
 import PySide6.QtGui as qtg
 
-from classes.basewidget import BaseWidget
+from classes.basewidgets import BaseWidget
 from classes.research.element_list import ElementList
 from classes.research.monitor import Monitor
 

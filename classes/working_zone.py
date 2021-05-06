@@ -1,7 +1,7 @@
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 
-from classes.basewidget import BaseWidget
+from classes.basewidgets import BaseWidget
 from classes.block_zone import BlockZone
 from classes.discover_zone import DiscoverZone
 

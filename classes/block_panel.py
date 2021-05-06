@@ -1,7 +1,8 @@
+import PySide6.QtCore as qtc
 import PySide6.QtGui as qtg
+from PySide6.QtCore import Qt
 
-from classes.basewidget import BaseWidget
-from classes.blocks.basic_block import BasicBlock
+from classes.basewidgets import BaseWidget, BlockView
 from classes.blocks.config import blocks
 
 
@@ -14,7 +15,7 @@ class BlockPanel(BaseWidget):
     def init_gui(self):
         """Separate function for GUI initialization"""
         block_names = [block["abbr"] for block in blocks]
-        block_widgets = [BasicBlock(name) for name in block_names]
+        block_widgets = [PanelBlockView(name) for name in block_names]
         self._init_layout(
             block_widgets + [""],
             is_vertical=False,
@@ -25,3 +26,30 @@ class BlockPanel(BaseWidget):
         self._init_palette({
             qtg.QPalette.Window: qtg.QColor("#526760")
         })
+
+
+class PanelBlockView(BlockView):
+    """View for block in Block Panel"""
+    def __init__(self, name, parent=None):
+        super().__init__(name, parent)
+        self.name = name
+        self.init_gui()
+
+    def init_gui(self):
+        """Separate function for GUI initialization"""
+        super().init_gui()
+
+        self._init_sizing(width=60, height=40)
+
+    def mouseMoveEvent(self, e):
+        """Event for dragging out block to the Block Zone"""
+        if e.buttons() != Qt.LeftButton:
+            return
+
+        mimeData = qtc.QMimeData()
+        mimeData.setText(self.name)
+
+        drag = qtg.QDrag(self)
+        drag.setMimeData(mimeData)
+        drag.setPixmap(qtg.QPixmap("img/block-plus.png"))
+        drag.exec_(Qt.MoveAction)
