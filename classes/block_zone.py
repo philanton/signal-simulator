@@ -38,13 +38,35 @@ class BlockZone(BaseWidget):
         """Accept creating new blocks"""
         e.accept()
 
-    def create_block(self, name="", from_block=None):
-        block_id = f"{name.lower()}_{self.index_rules.get(name)}"
-        block_config = [conf for conf in blocks if conf["abbr"] == name][0]
-        block_config.update({ "id": block_id })
+    def dropEvent(self, e):
+        """Create new block where mouse drops"""
+        text = e.mimeData().text()
+        self.create_block(text)
 
-        block = from_block if from_block else GridBlockView(name)
+        e.setDropAction(Qt.MoveAction)
+        e.accept()
 
+    def create_block(self, name=""):
+        if (self.get_cleared_block() and
+            self.get_cleared_block().config["id"] == name):
+            block = self.cleared_block
+            block.grid_pos = self.block_pos
+        else:
+            block_id = f"{name.lower()}_{self.index_rules.get(name)}"
+            self.index_rules[name] += 1
+
+            block_config = [conf for conf in blocks if conf["abbr"] == name][0]
+            block_config = block_config.copy()
+            block_config.update({ "id": block_id })
+
+            block = GridBlockView(
+                name,
+                self.block_pos,
+                default_config=block_config,
+                parent=self
+            )
+
+        self.hover_out()
         self.grid.addWidget(
             block,
             self.block_pos[0] - 1,
@@ -52,6 +74,18 @@ class BlockZone(BaseWidget):
             3,
             3
         )
+
+    def clear_block(self, block):
+        """"""
+        self.cleared_block = block
+        self.cleared_block.setParent(None)
+
+    def get_cleared_block(self):
+        """"""
+        try:
+            return self.cleared_block
+        except AttributeError:
+            return None
 
     def hover_in(self, cell_pos):
         self.__set_3x3_position(cell_pos)
@@ -106,10 +140,17 @@ class BlockZone(BaseWidget):
 
 class GridBlockView(BlockView):
     """View for block in Block Panel"""
-    def __init__(self, name, parent=None):
+    def __init__(self, name, grid_pos, default_config={}, parent=None):
         super().__init__(name, parent)
         self.name = name
+        self.grid_pos = grid_pos
+        self.config = self.default_config = default_config
         self.init_gui()
+
+        tip = "{}: {}".format(self.config["name"], self.config["id"])
+        self.setToolTip(tip)
+
+        self.setFocusPolicy(Qt.ClickFocus)
 
     def mouseDoubleClickEvent(self, e):
         """Invoke modal window with set of options"""
@@ -117,18 +158,35 @@ class GridBlockView(BlockView):
         if modal.exec_():
             print(modal.options)
 
-    def _mouseMoveEvent(self, e):
+    def mouseMoveEvent(self, e):
         """Event for dragging out block to the Block Zone"""
         if e.buttons() != Qt.LeftButton:
             return
 
+        try:
+            self.parent().clear_block(self)
+        except AttributeError:
+            pass
+
         mimeData = qtc.QMimeData()
-        mimeData.setText(self.text)
+        mimeData.setText(self.config["id"])
 
         drag = qtg.QDrag(self)
         drag.setMimeData(mimeData)
-        drag.setPixmap(qtg.QPixmap("img/block-plus.png"))
+        drag.setPixmap(qtg.QPixmap("img/block.png"))
         drag.exec_(Qt.MoveAction)
+
+    def focusOutEvent(self, e):
+        """"""
+        self.label.hover(leaves=True)
+
+    def keyPressEvent(self, e):
+        """"""
+        if e.key() == Qt.Key_Delete:
+            try:
+                self.parent().clear_block(self)
+            except AttributeError:
+                pass
 
 
 class GridCell(BaseWidget):
@@ -162,8 +220,8 @@ class GridCell(BaseWidget):
 
     def dropEvent(self, e):
         """Create new block where mouse drops"""
-        name = e.mimeData().text()
-        self.parent().create_block(name)
+        text = e.mimeData().text()
+        self.parent().create_block(text)
 
         e.setDropAction(Qt.MoveAction)
         e.accept()

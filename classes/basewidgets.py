@@ -135,16 +135,21 @@ class BlockLabel(BaseLabel):
 
         self.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
+    def hover(self, leaves=False):
+        """"""
+        if self.parent() and self.parent().hasFocus():
+            return
+
+        self._init_palette({
+            qtg.QPalette.Window: qtg.QColor("#C5FFFD" if leaves else "#8B8BAE")
+        })
+
     def event(self, event):
         """Control Hover Event"""
         if event.type() == qtc.QEvent.HoverEnter:
             self.setCursor(Qt.OpenHandCursor)
-            self._init_palette({
-                qtg.QPalette.Window: qtg.QColor("#8B8BAE")
-            })
+            self.hover()
         elif event.type() == qtc.QEvent.HoverLeave:
-            self._init_palette({
-                qtg.QPalette.Window: qtg.QColor("#C5FFFD")
-            })
+            self.hover(leaves=True)
 
         return super().event(event)
