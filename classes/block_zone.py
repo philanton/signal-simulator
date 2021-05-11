@@ -18,6 +18,7 @@ class BlockZone(BaseWidget):
         self.init_gui()
 
         self.index_rules = Counter([block["abbr"] for block in blocks])
+        self.block_positions = {}
 
     def init_gui(self):
         """Separate function for GUI initialization"""
@@ -66,6 +67,8 @@ class BlockZone(BaseWidget):
                 parent=self
             )
 
+        self.block_positions.update({block.config["id"]: block.grid_pos})
+
         self.hover_out()
         self.grid.addWidget(
             block,
@@ -80,6 +83,8 @@ class BlockZone(BaseWidget):
         self.cleared_block = block
         self.cleared_block.setParent(None)
 
+        self.block_positions.update({block.config["id"]: (-10, -10)})
+
     def get_cleared_block(self):
         """"""
         try:
@@ -88,7 +93,10 @@ class BlockZone(BaseWidget):
             return None
 
     def hover_in(self, cell_pos):
-        self.__set_3x3_position(cell_pos)
+        x = self.index_hint(cell_pos[0], max=self.grid_shape[0])
+        y = self.index_hint(cell_pos[1], max=self.grid_shape[1])
+
+        self.block_pos = (x, y)
         self.__hover()
 
     def hover_out(self):
@@ -100,30 +108,22 @@ class BlockZone(BaseWidget):
 
         for x in range(x_from, x_to):
             for y in range(y_from, y_to):
-                current_cell = self.grid.itemAtPosition(x, y).widget()
+                current_cell = self.get_item_at_pos(x, y)
                 current_cell.change_cell_colour(leaves=leaves)
 
-    def __set_3x3_position(self, position):
-        x = self.block_index_hint["x"].get(position[0], position[0])
-        y = self.block_index_hint["y"].get(position[1], position[1])
+    def get_item_at_pos(self, x, y):
+        return self.grid.itemAtPosition(x, y).widget()
 
-        self.block_pos = (x, y)
+    def index_hint(self, c, min=0, max=100):
+        return (max - 1  if c >= max
+                else c if c > min
+                else min + 1)
 
     def _init_grid_layout(self):
         """"""
         self.margins = (5, 5, 5, 5)
         self.spacing = 2
         self.grid_shape = (100, 100)
-        self.block_index_hint = {
-            "x": {
-                0: 1,
-                self.grid_shape[0] - 1: self.grid_shape[0] - 2
-            },
-            "y": {
-                0: 1,
-                self.grid_shape[1] - 1: self.grid_shape[1] - 2
-            }
-        }
 
         self.grid = qtw.QGridLayout()
         self.grid.setContentsMargins(*self.margins)
@@ -220,9 +220,29 @@ class GridCell(BaseWidget):
             qtg.QPalette.Window: qtg.QColor(colour)
         })
 
+    def check_no_near_neighbours(self):
+        pos = self.grid_pos
+        pos = (
+            self.parent().index_hint(pos[0], max=self.parent().grid_shape[0]),
+            self.parent().index_hint(pos[1], max=self.parent().grid_shape[1])
+        )
+
+        for x, y in self.parent().block_positions.values():
+            d_x = x - pos[0]
+            d_y = y - pos[1]
+            d = (d_x ** 2 + d_y ** 2) ** 0.5
+
+            if d < 3: return False
+
+        return True
+
     def dragEnterEvent(self, e):
         """Accept creating new blocks"""
-        self.parent().hover_in(self.grid_pos)
+        pos = self.grid_pos
+        if not self.check_no_near_neighbours():
+            pos = self.parent().block_pos
+
+        self.parent().hover_in(pos)
         e.accept()
 
     def dragLeaveEvent(self, e):
