@@ -65,15 +65,13 @@ class BaseWidget(qtw.QWidget):
 
 
 class BlockView(BaseWidget):
-    """View for block in Block Panel"""
-    def __init__(self, name, parent):
+    """View for block"""
+    def __init__(self, label, parent):
         super().__init__(parent)
-        self.name = name
-        self.init_gui()
+        self.label = label
 
     def init_gui(self):
         """Separate function for GUI initialization"""
-        self.label = BlockLabel(self.name)
         self._init_layout(
             [self.label],
             margins=(3, 3, 3, 3)
@@ -137,7 +135,7 @@ class BlockLabel(BaseLabel):
 
     def hover(self, leaves=False):
         """"""
-        if self.parent() and self.parent().hasFocus():
+        if self.hasFocus():
             return
 
         self._init_palette({

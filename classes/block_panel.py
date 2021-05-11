@@ -2,7 +2,7 @@ import PySide6.QtCore as qtc
 import PySide6.QtGui as qtg
 from PySide6.QtCore import Qt
 
-from classes.basewidgets import BaseWidget, BlockView
+from classes.basewidgets import BaseWidget, BlockView, BlockLabel
 from classes.config import blocks
 
 
@@ -31,7 +31,7 @@ class BlockPanel(BaseWidget):
 class PanelBlockView(BlockView):
     """View for block in Block Panel"""
     def __init__(self, name, parent=None):
-        super().__init__(name, parent)
+        super().__init__(BlockLabel(name), parent)
         self.name = name
         self.init_gui()
 

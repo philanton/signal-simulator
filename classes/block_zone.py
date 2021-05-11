@@ -5,7 +5,7 @@ import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 
-from classes.basewidgets import BaseWidget, BlockView
+from classes.basewidgets import BaseWidget, BlockView, BlockLabel
 from classes.config import blocks
 from classes.modals import BaseModal
 
@@ -141,7 +141,7 @@ class BlockZone(BaseWidget):
 class GridBlockView(BlockView):
     """View for block in Block Panel"""
     def __init__(self, name, grid_pos, default_config={}, parent=None):
-        super().__init__(name, parent)
+        super().__init__(GridBlockLabel(name), parent)
         self.name = name
         self.grid_pos = grid_pos
         self.config = self.default_config = default_config
@@ -149,8 +149,6 @@ class GridBlockView(BlockView):
 
         tip = "{}: {}".format(self.config["name"], self.config["id"])
         self.setToolTip(tip)
-
-        self.setFocusPolicy(Qt.ClickFocus)
 
     def mouseDoubleClickEvent(self, e):
         """Invoke modal window with set of options"""
@@ -176,17 +174,31 @@ class GridBlockView(BlockView):
         drag.setPixmap(qtg.QPixmap("img/block.png"))
         drag.exec_(Qt.MoveAction)
 
+    def delete(self):
+        self.parent().clear_block(self)
+
+
+class GridBlockLabel(BlockLabel):
+    """"""
+    def __init__(self, text, parent=None):
+        super().__init__(text, parent)
+
+        self.setFocusPolicy(Qt.ClickFocus)
+
     def focusOutEvent(self, e):
         """"""
-        self.label.hover(leaves=True)
+        self.hover(leaves=True)
 
     def keyPressEvent(self, e):
         """"""
         if e.key() == Qt.Key_Delete:
             try:
-                self.parent().clear_block(self)
+                self.parent().delete()
             except AttributeError:
                 pass
+
+    def mouseMoveEvent(self, e):
+        self.parent().event(e)
 
 
 class GridCell(BaseWidget):
