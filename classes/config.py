@@ -7,6 +7,7 @@ blocks = [
             {
                 "label": "Type",
                 "type": "radio",
+                "variations": ["analog", "discrete"],
                 "value": 0
             },
             {
@@ -21,16 +22,19 @@ blocks = [
             },
             {
                 "label": "Periods per symbol",
+                "attached": {"to": "Type", "value": 0},
                 "type": "num",
                 "value": 2
             },
             {
                 "label": "Counts per period",
+                "attached": {"to": "Type", "value": 0},
                 "type": "num",
                 "value": 2
             },
             {
                 "label": "Counts per symbol",
+                "attached": {"to": "Type", "value": 1},
                 "type": "num",
                 "value": 4
             },

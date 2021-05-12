@@ -152,9 +152,8 @@ class GridBlockView(BlockView):
 
     def mouseDoubleClickEvent(self, e):
         """Invoke modal window with set of options"""
-        modal = BaseModal()
-        if modal.exec_():
-            print(modal.options)
+        modal = BaseModal(self.config)
+        modal.exec_()
 
     def mouseMoveEvent(self, e):
         """Event for dragging out block to the Block Zone"""
