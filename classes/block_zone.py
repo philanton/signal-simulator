@@ -8,13 +8,15 @@ from PySide6.QtCore import Qt
 from classes.basewidgets import BaseWidget, BlockView, BlockLabel
 from classes.config import blocks
 from classes.modals import BaseModal
+from classes.states import BlockStore
 
 
 class BlockZone(BaseWidget):
     """It's a zone, where we place and connect over blocks"""
 
-    def __init__(self, parent=None):
+    def __init__(self, notifier, parent=None):
         super().__init__(parent)
+        self.block_state_notifier = notifier
         self.init_gui()
 
         self.index_rules = Counter([block["abbr"] for block in blocks])
@@ -142,11 +144,16 @@ class GridBlockView(BlockView):
     """View for block in Block Panel"""
     def __init__(self, name, grid_pos, default_config={}, parent=None):
         super().__init__(GridBlockLabel(name), parent)
+
         self.name = name
         self.grid_pos = grid_pos
         self.config = self.default_config = default_config
-        self.init_gui()
 
+        self.store = BlockStore(self.config["id"], self.config["name"])
+        self.parent().block_state_notifier.add_state(self.store)
+        self.parent().block_state_notifier.notify_all()
+
+        self.init_gui()
         tip = "{}: {}".format(self.config["name"], self.config["id"])
         self.setToolTip(tip)
 
@@ -174,6 +181,8 @@ class GridBlockView(BlockView):
         drag.exec_(Qt.MoveAction)
 
     def delete(self):
+        self.parent().block_state_notifier.remove_state(self.store.id)
+        self.parent().block_state_notifier.notify_all()
         self.parent().clear_block(self)
 
 

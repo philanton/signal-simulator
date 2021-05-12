@@ -2,6 +2,7 @@ import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 
 from classes.basewidgets import BaseWidget
+from classes.states import StateNotifier
 from classes.block_zone import BlockZone
 from classes.discover_zone import DiscoverZone
 
@@ -20,9 +21,10 @@ class WorkingZone(BaseWidget):
             qtw.QSizePolicy.MinimumExpanding
         ))
 
+        block_state_notifier = StateNotifier()
         block_zone = qtw.QScrollArea(self)
-        block_zone.setWidget(BlockZone())
-        discover_zone = DiscoverZone(self)
+        block_zone.setWidget(BlockZone(block_state_notifier))
+        discover_zone = DiscoverZone(block_state_notifier, self)
         self._init_layout(
             [
                 block_zone,

@@ -5,8 +5,9 @@ from classes.basewidgets import BaseWidget
 
 class Monitor(BaseWidget):
     """It's a monitor with plots of signals"""
-    def __init__(self, parent=None):
+    def __init__(self, notifier, parent=None):
         super().__init__(parent)
+        self.element_state_notifier = notifier
         self.init_gui()
 
     def init_gui(self):
