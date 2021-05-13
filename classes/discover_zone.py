@@ -1,4 +1,6 @@
 import PySide6.QtGui as qtg
+import PySide6.QtWidgets as qtw
+from PySide6.QtCore import Qt
 
 from classes.basewidgets import BaseWidget
 from classes.states import StateNotifier
@@ -17,12 +19,11 @@ class DiscoverZone(BaseWidget):
         """Separate function for GUI initialization"""
         self._init_sizing(width=300)
 
-        element_state_notifier = StateNotifier()
-        monitor = Monitor(element_state_notifier)
-        element_list = ElementList(
-            self.block_state_notifier,
-            element_state_notifier
-        )
+        self.element_state_notifier = StateNotifier()
+        monitor = Monitor(self.element_state_notifier)
+
+        element_list = self._init_scroll_list()
+
         self._init_layout(
             [
                 monitor,
@@ -35,3 +36,18 @@ class DiscoverZone(BaseWidget):
         self._init_palette({
             qtg.QPalette.Window: qtg.QColor("#374B4A")
         })
+
+    def _init_scroll_list(self):
+        """"""
+        element_list = qtw.QScrollArea(self)
+        element_list.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        element_list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        element_list.setWidgetResizable(True)
+        element_list.setWidget(
+            ElementList(
+                self.block_state_notifier,
+                self.element_state_notifier
+            )
+        )
+
+        return element_list

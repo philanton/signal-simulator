@@ -1,4 +1,6 @@
-from collections import namedtuple
+from dataclasses import dataclass
+
+from PySide6.QtGui import QColor
 
 
 class StateNotifier():
@@ -27,6 +29,17 @@ class StateNotifier():
         for func in self._observers:
             func(*self._states)
 
+@dataclass
+class BlockStore:
+    id: str
+    name: str
 
-BlockStore = namedtuple("BlockStore", "id name")
-ElementStore = namedtuple("ElementStore", "id colour")
+    def __hash__(self): return hash(self.id)
+
+@dataclass
+class ElementStore:
+    id: str
+    color: QColor
+    show: bool
+
+    def __hash__(self): return hash(self.id)
