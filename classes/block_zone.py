@@ -55,11 +55,14 @@ class BlockZone(BaseWidget):
             block = self.cleared_block
             block.grid_pos = self.block_pos
         else:
-            block_id = f"{name.lower()}_{self.index_rules.get(name)}"
-            self.index_rules[name] += 1
-
-            block_config = [conf for conf in blocks if conf["abbr"] == name][0]
+            block_config = [
+                conf for conf in blocks if conf["abbr-ua"] == name
+            ][0]
             block_config = block_config.copy()
+
+            abbr = block_config["abbr"]
+            block_id = f"{abbr.lower()}_{self.index_rules.get(abbr)}"
+            self.index_rules[name] += 1
             block_config.update({ "id": block_id })
 
             block = GridBlockView(

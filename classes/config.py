@@ -1,54 +1,56 @@
 blocks = [
     {
-        "name": "Data Source",
+        "name": "Джерело сигналу",
         "description": "",
         "abbr": "DS",
+        "abbr-ua": "ДС",
         "options": [
             {
-                "label": "Type",
+                "label": "Тип",
                 "type": "radio",
-                "variations": ["analog", "discrete"],
+                "variations": ["аналоговий", "дискретний"],
                 "value": 0
             },
             {
-                "label": "Amplitude",
+                "label": "Амплітуда",
                 "type": "num",
                 "value": 1
             },
             {
-                "label": "Frequency",
+                "label": "Частота",
                 "type": "num",
                 "value": 50
             },
             {
-                "label": "Periods per symbol",
-                "attached": {"to": "Type", "value": 0},
+                "label": "Кількість періодів на логічний символ алфавіту",
+                "attached": {"to": 0, "value": 0},
                 "type": "num",
                 "value": 2
             },
             {
-                "label": "Counts per period",
-                "attached": {"to": "Type", "value": 0},
+                "label": "Кількість відліків на період",
+                "attached": {"to": 0, "value": 0},
                 "type": "num",
                 "value": 2
             },
             {
-                "label": "Counts per symbol",
-                "attached": {"to": "Type", "value": 1},
+                "label": "Кількість відліків на символ алфавіту",
+                "attached": {"to": 0, "value": 1},
                 "type": "num",
                 "value": 4
             },
             {
-                "label": "Length",
+                "label": "Кількість передаваємих символів",
                 "type": "num",
                 "value": 1
             }
         ]
     },
     {
-        "name": "Communication Line",
+        "name": "Лінія зв'язку'",
         "description": "",
         "abbr": "CL",
+        "abbr-ua": "ЛЗ",
         "options": [
             {
                 "label": "",
@@ -58,37 +60,55 @@ blocks = [
         ]
     },
     {
-        "name": "Interference",
+        "name": "Завада",
         "description": "",
         "abbr": "Infr",
+        "abbr-ua": "Звд",
         "options": [
             {
-                "label": "Type",
+                "label": "Тип",
                 "type": "radio",
+                "variations": ["білий шум"],
                 "value": 0
             },
             {
-                "label": "Amplitude",
+                "label": "Амплітуда",
                 "type": "num",
                 "value": 1
             },
             {
-                "label": "Counts per Symbol",
+                "label": "Кількість відліків на символ алфавіту",
                 "type": "num",
                 "value": 3
             }
         ]
     },
     {
-        "name": "Correlator",
+        "name": "Коррелятор",
         "description": "",
         "abbr": "Corr",
+        "abbr-ua": "Корр",
         "options": {}
     },
     {
-        "name": "Reference Data Source",
+        "name": "Джерело еталонного сигналу",
         "description": "",
         "abbr": "RDS",
+        "abbr-ua": "ДЕС",
+        "options": {}
+    },
+    {
+        "name": "Джерело опорного сигналу",
+        "description": "",
+        "abbr": "PDS",
+        "abbr-ua": "ДОС",
+        "options": {}
+    },
+    {
+        "name": "Пристрій прийняття рішення",
+        "description": "",
+        "abbr": "DD",
+        "abbr-ua": "ППР",
         "options": {}
     }
 ]

@@ -74,15 +74,15 @@ class ElementListRow(BaseWidget):
         """Separate function for GUI initialization"""
         items = []
         if self.is_header:
-            items.append(CellLabel(50, "ID", bgcolor="#8B8BAE"))
-            items.append(CellLabel(110, "Name", bgcolor="#8B8BAE"))
-            items.append(CellLabel(60, "Colour", bgcolor="#8B8BAE"))
-            items.append(CellLabel(40, "Show", bgcolor="#8B8BAE"))
+            items.append(CellLabel(45, "ID", bgcolor="#8B8BAE"))
+            items.append(CellLabel(110, "Ім'я'", bgcolor="#8B8BAE"))
+            items.append(CellLabel(60, "Колір", bgcolor="#8B8BAE"))
+            items.append(CellLabel(45, "Показ", bgcolor="#8B8BAE"))
         else:
-            items.append(CellLabel(50, self.block_state.id))
+            items.append(CellLabel(45, self.block_state.id))
             items.append(CellLabel(110, self.block_state.name))
             items.append(CellColourPicker(60, self.element_state))
-            items.append(CellCheckBox(40, self.element_state))
+            items.append(CellCheckBox(45, self.element_state))
 
         self._init_layout(
             items,

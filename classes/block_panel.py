@@ -14,7 +14,7 @@ class BlockPanel(BaseWidget):
 
     def init_gui(self):
         """Separate function for GUI initialization"""
-        block_names = [block["abbr"] for block in blocks]
+        block_names = [block["abbr-ua"] for block in blocks]
         block_widgets = [PanelBlockView(name) for name in block_names]
         self._init_layout(
             block_widgets + [""],
