@@ -3,7 +3,7 @@ import PySide6.QtGui as qtg
 from PySide6.QtCore import Qt
 
 from classes.basewidgets import BaseWidget, BlockView, BlockLabel
-from classes.config import blocks
+from classes.config import blocks as block_configs
 
 
 class BlockPanel(BaseWidget):
@@ -14,8 +14,12 @@ class BlockPanel(BaseWidget):
 
     def init_gui(self):
         """Separate function for GUI initialization"""
-        block_names = [block["abbr-ua"] for block in blocks]
-        block_widgets = [PanelBlockView(name) for name in block_names]
+        block_widgets = [
+            PanelBlockView(
+                conf["abbr-ua"],
+                conf["abbr"]
+            ) for conf in block_configs
+        ]
         self._init_layout(
             block_widgets + [""],
             is_vertical=False,
@@ -30,9 +34,10 @@ class BlockPanel(BaseWidget):
 
 class PanelBlockView(BlockView):
     """View for block in Block Panel"""
-    def __init__(self, name, parent=None):
+    def __init__(self, name, id, parent=None):
         super().__init__(BlockLabel(name), parent)
         self.name = name
+        self.id = id
         self.init_gui()
 
     def init_gui(self):
@@ -47,7 +52,7 @@ class PanelBlockView(BlockView):
             return
 
         mimeData = qtc.QMimeData()
-        mimeData.setText(self.name)
+        mimeData.setText(self.id)
 
         drag = qtg.QDrag(self)
         drag.setMimeData(mimeData)

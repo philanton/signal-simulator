@@ -47,7 +47,7 @@ blocks = [
         ]
     },
     {
-        "name": "Лінія зв'язку'",
+        "name": "Лінія зв'язку",
         "description": "",
         "abbr": "CL",
         "abbr-ua": "ЛЗ",
