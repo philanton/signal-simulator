@@ -179,6 +179,8 @@ class CellColourPicker(BaseWidget):
 
     def change_state(self):
         color = qtw.QColorDialog.getColor(self.state.color)
+        if not color.isValid():
+            return
 
         self.color_palette.setColor(qtg.QPalette.Button, color)
         self.picker.setPalette(self.color_palette)
