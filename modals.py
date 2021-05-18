@@ -11,15 +11,16 @@ class BaseModal(qtw.QDialog, BaseWidget):
 
         self.config = config
 
-        self.setWindowTitle("Options: {}".format(self.config["name"]))
-        self.init_gui()
+        self.setWindowTitle(
+            "Настройка параметрів: {}".format(self.config["name"])
+        )
 
-    def init_gui(self):
+    def init_gui(self, options):
         """"""
         self._init_sizing(width=400)
 
         self._init_buttons()
-        form = self._init_options()
+        form = self._init_options(options)
         self._init_layout(
             [
                 BaseLabel(self.config["description"], self),
@@ -33,20 +34,12 @@ class BaseModal(qtw.QDialog, BaseWidget):
             qtg.QPalette.Window: qtg.QColor("#88D9E6")
         })
 
-    def _form_by_type(self, option):
-        return form_by_type[option["type"]](option)
-
     def _init_options(self):
-        self.options = [
-            self._form_by_type(option) for option in self.config["options"]
-        ]
-
+        """"""
         form_layout = qtw.QFormLayout()
-        for params in self.options:
-            if params[0] == "radio":
-                form_layout.addRow(params[1])
-            elif params[0] == "num":
-                form_layout.addRow(*params[1:])
+
+        for params in options:
+            form_layout.addRow(*params)
 
         form_widget = qtw.QWidget()
         form_widget.setLayout(form_layout)
@@ -57,6 +50,9 @@ class BaseModal(qtw.QDialog, BaseWidget):
         self.buttonBox = qtw.QDialogButtonBox(buttons)
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
+
+
+# Here will be classes for modals
 
 
 form_by_type = {
