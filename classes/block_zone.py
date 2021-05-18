@@ -5,10 +5,10 @@ import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 
-from classes.basewidgets import BaseWidget, BlockView, BlockLabel
-from classes.config import blocks as block_configs
-from classes.modals import BaseModal
-from classes.states import BlockStore
+from classes.basewidgets import BaseWidget, BlockLabel, BlockView
+from config import blocks as block_configs
+from modals import BaseModal
+from states import BlockStore
 
 
 class BlockZone(BaseWidget):
@@ -80,8 +80,8 @@ class BlockZone(BaseWidget):
         x, y = pos
         max_x, max_y = self.grid_shape
 
-        x = max_x - 1  if x >= max_x else x if x > 0 else 1
-        y = max_y - 1  if y >= max_y else y if y > 0 else 1
+        x = max_x - 1 if x >= max_x else x if x > 0 else 1
+        y = max_y - 1 if y >= max_y else y if y > 0 else 1
 
         return x, y
 
@@ -121,7 +121,7 @@ class BlockManager():
 
         id = f"{abbr.lower()}_{self.index_rules.get(abbr)}"
         self.index_rules[abbr] += 1
-        config.update({ "id": id })
+        config.update({"id": id})
 
         block = GridBlockView(
             config["abbr-ua"],

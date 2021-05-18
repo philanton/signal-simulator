@@ -29,12 +29,15 @@ class StateNotifier():
         for func in self._observers:
             func(*self._states)
 
+
 @dataclass
 class BlockStore:
     id: str
     name: str
 
-    def __hash__(self): return hash(self.id)
+    def __hash__(self):
+        return hash(self.id)
+
 
 @dataclass
 class ElementStore:
@@ -42,4 +45,5 @@ class ElementStore:
     color: QColor
     show: bool
 
-    def __hash__(self): return hash(self.id)
+    def __hash__(self):
+        return hash(self.id)

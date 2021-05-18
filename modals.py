@@ -1,9 +1,7 @@
-import PySide6.QtCore as qtc
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
-from PySide6.QtCore import Qt
 
-from classes.basewidgets import BaseWidget, BaseLabel
+from classes.basewidgets import BaseLabel, BaseWidget
 
 
 class BaseModal(qtw.QDialog, BaseWidget):
@@ -32,7 +30,7 @@ class BaseModal(qtw.QDialog, BaseWidget):
         )
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("#88D9E6") #"#C5FFFD"
+            qtg.QPalette.Window: qtg.QColor("#88D9E6")
         })
 
     def _form_by_type(self, option):
@@ -55,8 +53,8 @@ class BaseModal(qtw.QDialog, BaseWidget):
         return form_widget
 
     def _init_buttons(self):
-        QBtn = qtw.QDialogButtonBox.Ok | qtw.QDialogButtonBox.Cancel
-        self.buttonBox = qtw.QDialogButtonBox(QBtn)
+        buttons = qtw.QDialogButtonBox.Ok | qtw.QDialogButtonBox.Cancel
+        self.buttonBox = qtw.QDialogButtonBox(buttons)
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
 
@@ -65,6 +63,7 @@ form_by_type = {
     "radio": lambda a: radio_creator(a),
     "num": lambda a: num_creator(a)
 }
+
 
 def radio_creator(option):
     """"""
@@ -79,6 +78,7 @@ def radio_creator(option):
             radio_button.setChecked(True)
 
     return option["type"], radio_layout
+
 
 def num_creator(option):
     return option["type"], option["label"], qtw.QSpinBox()

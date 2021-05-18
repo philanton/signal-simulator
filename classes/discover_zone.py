@@ -3,9 +3,9 @@ import PySide6.QtWidgets as qtw
 from PySide6.QtCore import Qt
 
 from classes.basewidgets import BaseWidget
-from classes.states import StateNotifier
-from classes.research.element_list import ElementList
-from classes.research.monitor import Monitor
+from classes.element_list import ElementList
+from classes.monitor import Monitor
+from states import StateNotifier
 
 
 class DiscoverZone(BaseWidget):

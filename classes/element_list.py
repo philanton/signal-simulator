@@ -3,8 +3,8 @@ from random import randint
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 
-from classes.basewidgets import BaseWidget, BaseLabel
-from classes.states import ElementStore
+from classes.basewidgets import BaseLabel, BaseWidget
+from states import ElementStore
 
 
 class ElementList(BaseWidget):
@@ -65,7 +65,7 @@ class ElementListRow(BaseWidget):
         if not is_header:
             self.element_state = ElementStore(
                 block_state.id,
-                qtg.QColor(*[randint(0,256) for a in [0] * 3]),
+                qtg.QColor(*[randint(0, 256) for a in [0] * 3]),
                 False
             )
         self.init_gui()
@@ -107,7 +107,7 @@ class CellLabel(BaseLabel):
         self.setMargin(3)
 
         self._init_font()
-        self.setWordWrap(True);
+        self.setWordWrap(True)
 
         self._init_palette({
             qtg.QPalette.Window: qtg.QColor(self.bgcolor),

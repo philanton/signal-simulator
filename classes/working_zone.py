@@ -2,9 +2,9 @@ import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 
 from classes.basewidgets import BaseWidget
-from classes.states import StateNotifier
 from classes.block_zone import BlockZone
 from classes.discover_zone import DiscoverZone
+from states import StateNotifier
 
 
 class WorkingZone(BaseWidget):
