@@ -78,7 +78,7 @@ class BlockView(BaseWidget):
         )
 
         self._init_palette({
-            qtg.QPalette.Window: qtg.QColor("#88D9E6")
+            qtg.QPalette.Window: qtg.QColor("#5d4a66")
         })
 
 
@@ -126,7 +126,7 @@ class BlockLabel(BaseLabel):
 
         self._init_palette({
             qtg.QPalette.Window: qtg.QColor("#C5FFFD"),
-            qtg.QPalette.WindowText: qtg.QColor("#88D9E6")
+            qtg.QPalette.WindowText: qtg.QColor("#499167")
         })
 
         self._init_font("monospace", 13, is_bold=True)

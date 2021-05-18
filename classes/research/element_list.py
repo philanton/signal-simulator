@@ -75,7 +75,7 @@ class ElementListRow(BaseWidget):
         items = []
         if self.is_header:
             items.append(CellLabel(45, "ID", bgcolor="#8B8BAE"))
-            items.append(CellLabel(110, "Ім'я'", bgcolor="#8B8BAE"))
+            items.append(CellLabel(110, "Ім'я", bgcolor="#8B8BAE"))
             items.append(CellLabel(60, "Колір", bgcolor="#8B8BAE"))
             items.append(CellLabel(45, "Показ", bgcolor="#8B8BAE"))
         else:

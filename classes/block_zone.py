@@ -130,12 +130,14 @@ class BlockManager():
             parent=self.parent
         )
         self.blocks.add(block)
+        self.update_neighbors(block)
 
         self.parent.draw_block(block)
 
     def remove_block(self, block):
         """"""
         self.cached_block = block
+        self.update_neighbors(block, leaves=True)
         self.cached_block.setParent(None)
         self.cached_block.grid_pos = (-10, -10)
 
@@ -143,9 +145,35 @@ class BlockManager():
         """"""
         block = self.cached_block
         block.grid_pos = pos
+        self.update_neighbors(block)
         self.parent.draw_block(block)
 
-    def check_neighbours(self, pos):
+    def update_neighbors(self, c_block, leaves=False):
+        """"""
+        if leaves:
+            for block in c_block.neighbors[:]:
+                block.allowed_neighbors.append(c_block.config["abbr"])
+                block.neighbors.remove(c_block)
+
+                c_block.allowed_neighbors.append(block.config["abbr"])
+                c_block.neighbors.remove(block)
+        else:
+            neighbors, _ = self.check_neighbours(
+                c_block.config["abbr"],
+                c_block.grid_pos
+            )
+
+            for block in neighbors:
+                block.allowed_neighbors.remove(c_block.config["abbr"])
+                block.neighbors.append(c_block)
+
+                c_block.allowed_neighbors.remove(block.config["abbr"])
+                c_block.neighbors.append(block)
+
+        c_block.update_state()
+
+    def check_neighbours(self, name, pos):
+        """"""
         c_x, c_y = self.parent.index_hint(pos)
         valid = []
         not_valid = []
@@ -156,7 +184,10 @@ class BlockManager():
             if d < 3:
                 not_valid.append(block)
             elif d == 3:
-                valid.append(block)
+                if name in block.allowed_neighbors:
+                    valid.append(block)
+                else:
+                    not_valid.append(block)
 
         return valid, not_valid
 
@@ -169,6 +200,8 @@ class GridBlockView(BlockView):
         self.name = name
         self.grid_pos = grid_pos
         self.config = self.default_config = default_config
+        self.neighbors = []
+        self.allowed_neighbors = self.config["allowed"][:]
 
         self.store = BlockStore(self.config["id"], self.config["name"])
         self.parent().block_state_notifier.add_state(self.store)
@@ -191,7 +224,7 @@ class GridBlockView(BlockView):
         self.parent().block_manager.remove_block(self)
 
         mimeData = qtc.QMimeData()
-        mimeData.setText(self.config["id"])
+        mimeData.setText(self.config["abbr"] + " " + self.config["id"])
 
         drag = qtg.QDrag(self)
         drag.setMimeData(mimeData)
@@ -202,6 +235,17 @@ class GridBlockView(BlockView):
         self.parent().block_state_notifier.remove_state(self.store.id)
         self.parent().block_state_notifier.notify_all()
         self.parent().block_manager.remove_block(self)
+
+    def notify_neighbors(self):
+        """"""
+        for block in self.neighbors:
+            if self.config["abbr"] in block.config["depends"]:
+                block.update_state()
+
+    def update_state(self):
+        """"""
+        print(self.config["id"])
+        self.notify_neighbors()
 
 
 class GridBlockLabel(BlockLabel):
@@ -246,7 +290,9 @@ class GridCell(BaseWidget):
     def dragEnterEvent(self, e):
         """Accept creating new blocks"""
         pos = self.grid_pos
-        _, blocks = self.parent().block_manager.check_neighbours(self.grid_pos)
+        manager = self.parent().block_manager
+        abbr = e.mimeData().text().split(" ")[0]
+        _, blocks = manager.check_neighbours(abbr, self.grid_pos)
 
         if blocks:
             pos = self.parent().block_pos

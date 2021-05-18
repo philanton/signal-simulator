@@ -4,6 +4,8 @@ blocks = [
         "description": "",
         "abbr": "DS",
         "abbr-ua": "ДС",
+        "allowed": ["CL"],
+        "depends": [],
         "options": [
             {
                 "label": "Тип",
@@ -51,6 +53,8 @@ blocks = [
         "description": "",
         "abbr": "CL",
         "abbr-ua": "ЛЗ",
+        "allowed": ["DS", "Infr", "Corr"],
+        "depends": ["DS", "Infr"],
         "options": [
             {
                 "label": "",
@@ -64,6 +68,8 @@ blocks = [
         "description": "",
         "abbr": "Infr",
         "abbr-ua": "Звд",
+        "allowed": ["CL"],
+        "depends": [],
         "options": [
             {
                 "label": "Тип",
@@ -88,6 +94,8 @@ blocks = [
         "description": "",
         "abbr": "Corr",
         "abbr-ua": "Корр",
+        "allowed": ["CL", "RDS", "DD"],
+        "depends": ["CL", "RDS"],
         "options": {}
     },
     {
@@ -95,6 +103,8 @@ blocks = [
         "description": "",
         "abbr": "RDS",
         "abbr-ua": "ДЕС",
+        "allowed": ["Corr"],
+        "depends": [],
         "options": {}
     },
     {
@@ -102,6 +112,8 @@ blocks = [
         "description": "",
         "abbr": "PDS",
         "abbr-ua": "ДОС",
+        "allowed": ["DD"],
+        "depends": [],
         "options": {}
     },
     {
@@ -109,6 +121,8 @@ blocks = [
         "description": "",
         "abbr": "DD",
         "abbr-ua": "ППР",
+        "allowed": ["Corr", "PDS"],
+        "depends": ["Corr", "PDS"],
         "options": {}
     }
 ]
