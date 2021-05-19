@@ -7,7 +7,6 @@ from PySide6.QtCore import Qt
 
 from classes.basewidgets import BaseWidget, BlockLabel, BlockView
 from config import blocks as block_configs
-from modals import BaseModal
 from states import BlockStore
 
 

@@ -129,7 +129,7 @@ class DataSourceModal(BaseModal):
         phase = qtw.QCheckBox()
         phase.setChecked(self.values["phase"])
         phase.stateChanged.connect(
-            lambda a: self.values.update({"phase": a})
+            lambda a: self.values.update({"phase": bool(a)})
         )
         layout.addRow("Зворотній", phase)
 
@@ -170,7 +170,7 @@ class DataSourceModal(BaseModal):
         counts_per_symbol.valueChanged.connect(
             lambda a: self.values.update({"counts_per_symbol": a})
         )
-        layout.addRow("Відліки / Символ", counts_per_symbol)
+        layout.addRow("Відліки / Символ  ", counts_per_symbol)
 
         self.inner_form_b = qtw.QWidget()
         self.inner_form_b.setLayout(layout)
