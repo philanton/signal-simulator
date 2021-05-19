@@ -34,6 +34,8 @@ class StateNotifier():
 class BlockStore:
     id: str
     name: str
+    done: bool
+    values: list
 
     def __hash__(self):
         return hash(self.id)
@@ -42,6 +44,8 @@ class BlockStore:
 @dataclass
 class ElementStore:
     id: str
+    done: bool
+    values: list
     color: QColor
     show: bool
 

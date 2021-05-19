@@ -203,7 +203,12 @@ class GridBlockView(BlockView):
         self.neighbors = []
         self.allowed_neighbors = self.config["allowed"][:]
 
-        self.store = BlockStore(self.config["id"], self.config["name"])
+        self.store = BlockStore(
+            self.config["id"],
+            self.config["name"],
+            False,
+            []
+        )
         self.parent().block_state_notifier.add_state(self.store)
         self.parent().block_state_notifier.notify_all()
 
@@ -213,10 +218,10 @@ class GridBlockView(BlockView):
 
     def mouseDoubleClickEvent(self, e):
         """Invoke modal window with set of options"""
-        modal = BaseModal(self.config.copy())
-        
+        modal = self.config["modal"](self.config.copy())
+
         if modal.exec_():
-            self.config.update(modal.config)
+            self.config.update({"values": modal.values})
 
     def mouseMoveEvent(self, e):
         """Event for dragging out block to the Block Zone"""

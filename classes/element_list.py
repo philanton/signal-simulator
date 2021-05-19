@@ -65,6 +65,8 @@ class ElementListRow(BaseWidget):
         if not is_header:
             self.element_state = ElementStore(
                 block_state.id,
+                block_state.done,
+                block_state.values,
                 qtg.QColor(*[randint(0, 256) for a in [0] * 3]),
                 False
             )

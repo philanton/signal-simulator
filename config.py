@@ -1,3 +1,9 @@
+from modals import (DataSourceModal,
+                    InterferenceModal,
+                    ConnectionLineModal,
+                    CorrelatorModal,
+                    ReferenceDSModal)
+
 blocks = [
     {
         "name": "Джерело сигналу",
@@ -6,47 +12,17 @@ blocks = [
         "abbr-ua": "ДС",
         "allowed": ["CL"],
         "depends": [],
-        "options": [
-            {
-                "label": "Тип",
-                "type": "radio",
-                "variations": ["аналоговий", "дискретний"],
-                "value": 0
-            },
-            {
-                "label": "Амплітуда",
-                "type": "num",
-                "value": 1
-            },
-            {
-                "label": "Частота",
-                "type": "num",
-                "value": 50
-            },
-            {
-                "label": "Кількість періодів на логічний символ алфавіту",
-                "attached": {"to": 0, "value": 0},
-                "type": "num",
-                "value": 2
-            },
-            {
-                "label": "Кількість відліків на період",
-                "attached": {"to": 0, "value": 0},
-                "type": "num",
-                "value": 2
-            },
-            {
-                "label": "Кількість відліків на символ алфавіту",
-                "attached": {"to": 0, "value": 1},
-                "type": "num",
-                "value": 4
-            },
-            {
-                "label": "Кількість передаваємих символів",
-                "type": "num",
-                "value": 1
-            }
-        ]
+        "modal": DataSourceModal,
+        "values": {
+            "type": 0,
+            "amplitude": 5,
+            "frequency": 2,
+            "phase": 0,
+            "periods_per_symbol": 5,
+            "counts_per_period": 10,
+            "counts_per_symbol": 50,
+            "length": 2
+        }
     },
     {
         "name": "Лінія зв'язку",
@@ -55,13 +31,12 @@ blocks = [
         "abbr-ua": "ЛЗ",
         "allowed": ["DS", "Infr", "Corr"],
         "depends": ["DS", "Infr"],
-        "options": [
-            {
-                "label": "",
-                "type": "",
-                "value": 0
-            }
-        ]
+        "modal": ConnectionLineModal,
+        "values": {
+            "infr_coef": 0.3,
+            "signal_coef": 0.7,
+            "counts_per_symbol": 50
+        }
     },
     {
         "name": "Завада",
@@ -70,24 +45,12 @@ blocks = [
         "abbr-ua": "Звд",
         "allowed": ["CL"],
         "depends": [],
-        "options": [
-            {
-                "label": "Тип",
-                "type": "radio",
-                "variations": ["білий шум"],
-                "value": 0
-            },
-            {
-                "label": "Амплітуда",
-                "type": "num",
-                "value": 1
-            },
-            {
-                "label": "Кількість відліків на символ алфавіту",
-                "type": "num",
-                "value": 3
-            }
-        ]
+        "modal": InterferenceModal,
+        "values": {
+            "type": 0,
+            "amplitude": 5,
+            "counts_per_symbol": 50
+        }
     },
     {
         "name": "Коррелятор",
@@ -96,7 +59,10 @@ blocks = [
         "abbr-ua": "Корр",
         "allowed": ["CL", "RDS", "DD"],
         "depends": ["CL", "RDS"],
-        "options": {}
+        "modal": CorrelatorModal,
+        "values": {
+            "counts_per_symbol": 50
+        }
     },
     {
         "name": "Джерело еталонного сигналу",
@@ -105,7 +71,10 @@ blocks = [
         "abbr-ua": "ДЕС",
         "allowed": ["Corr"],
         "depends": [],
-        "options": {}
+        "modal": ReferenceDSModal,
+        "values": {
+            "id": ""
+        }
     },
     {
         "name": "Джерело опорного сигналу",
@@ -114,7 +83,9 @@ blocks = [
         "abbr-ua": "ДОС",
         "allowed": ["DD"],
         "depends": [],
-        "options": {}
+        "values": {
+            "pivot_signal_level": 4
+        }
     },
     {
         "name": "Пристрій прийняття рішення",
@@ -123,6 +94,8 @@ blocks = [
         "abbr-ua": "ППР",
         "allowed": ["Corr", "PDS"],
         "depends": ["Corr", "PDS"],
-        "options": {}
+        "values": {
+            "pivot_signal_level": 4
+        }
     }
 ]
