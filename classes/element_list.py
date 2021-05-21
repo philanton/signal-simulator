@@ -67,6 +67,7 @@ class ElementListRow(BaseWidget):
                 block_state.id,
                 block_state.done,
                 block_state.values,
+                block_state.times,
                 qtg.QColor(*[randint(0, 256) for a in [0] * 3]),
                 False
             )

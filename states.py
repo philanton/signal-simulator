@@ -36,6 +36,7 @@ class BlockStore:
     name: str
     done: bool
     values: list
+    times: list
 
     def __hash__(self):
         return hash(self.id)
@@ -46,6 +47,7 @@ class ElementStore:
     id: str
     done: bool
     values: list
+    times: list
     color: QColor
     show: bool
 

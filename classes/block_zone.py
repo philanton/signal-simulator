@@ -8,6 +8,7 @@ from PySide6.QtCore import Qt
 from classes.basewidgets import BaseWidget, BlockLabel, BlockView
 from config import blocks as block_configs
 from states import BlockStore
+from state_updater import StateUpdater
 
 
 class BlockZone(BaseWidget):
@@ -153,6 +154,7 @@ class BlockManager():
             for block in c_block.neighbors[:]:
                 block.allowed_neighbors.append(c_block.config["abbr"])
                 block.neighbors.remove(c_block)
+                block.update_state()
 
                 c_block.allowed_neighbors.append(block.config["abbr"])
                 c_block.neighbors.remove(block)
@@ -206,6 +208,7 @@ class GridBlockView(BlockView):
             self.config["id"],
             self.config["name"],
             False,
+            [],
             []
         )
         self.parent().block_state_notifier.add_state(self.store)
@@ -221,6 +224,7 @@ class GridBlockView(BlockView):
 
         if modal.exec_():
             self.config.update({"values": modal.values})
+            self.update_state()
 
     def mouseMoveEvent(self, e):
         """Event for dragging out block to the Block Zone"""
@@ -242,16 +246,9 @@ class GridBlockView(BlockView):
         self.parent().block_state_notifier.notify_all()
         self.parent().block_manager.remove_block(self)
 
-    def notify_neighbors(self):
-        """"""
-        for block in self.neighbors:
-            if self.config["abbr"] in block.config["depends"]:
-                block.update_state()
-
     def update_state(self):
         """"""
-        print(self.config["id"])
-        self.notify_neighbors()
+        StateUpdater(self)
 
 
 class GridBlockLabel(BlockLabel):

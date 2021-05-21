@@ -61,6 +61,17 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "colorednoise"
+version = "1.1.1"
+description = "Generate Gaussian (1/f)**beta noise (e.g. pink noise)"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = "*"
+
+[[package]]
 name = "cycler"
 version = "0.10.0"
 description = "Composable style cycles"
@@ -310,7 +321,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.10"
-content-hash = "043bd1af076f727b38777350cf1b8486849f92a52a6bb3e1217f5b4446bbadc0"
+content-hash = "a74be74350a2b53886672212ab4e8bce0ab8cd89773b6593b99dc953b57834cf"
 
 [metadata.files]
 appdirs = [
@@ -331,6 +342,9 @@ cheap-repr = [
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
     {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
+]
+colorednoise = [
+    {file = "colorednoise-1.1.1.tar.gz", hash = "sha256:615ef764ce39afd91a621d66b5ae6f350c551dc400fdfffe9f8f27aadba53e96"},
 ]
 cycler = [
     {file = "cycler-0.10.0-py2.py3-none-any.whl", hash = "sha256:1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d"},
