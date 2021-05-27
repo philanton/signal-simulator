@@ -99,13 +99,20 @@ class DataSourceModal(BaseModal):
         else:
             self.inner_form_b.hide()
 
-        length = qtw.QSpinBox()
-        length.setValue(self.values["length"])
-        length.setRange(1, 20)
-        length.valueChanged.connect(
-            lambda a: self.values.update({"length": a})
+        bytes = qtw.QLineEdit()
+        bytes.setText(self.values["bytes"])
+        bytes.setInputMask("bbbbbbbb")
+        bytes.textChanged.connect(
+            lambda a: self.values.update({"bytes": a})
         )
-        self.options.append(["Кількість символів", length])
+        self.options.append(["Символи для передачі", bytes])
+        # length = qtw.QSpinBox()
+        # length.setValue(self.values["length"])
+        # length.setRange(1, 20)
+        # length.valueChanged.connect(
+        #     lambda a: self.values.update({"length": a})
+        # )
+        # self.options.append(["Кількість символів", length])
 
     def __type_changed(self, i):
         """"""
@@ -145,7 +152,10 @@ class DataSourceModal(BaseModal):
         periods_per_symbol.setValue(self.values["periods_per_symbol"])
         periods_per_symbol.setRange(1, 20)
         periods_per_symbol.valueChanged.connect(
-            lambda a: self.values.update({"periods_per_symbol": a})
+            lambda a: self.values.update({
+                "periods_per_symbol": a,
+                "counts_per_symbol": a * self.values["counts_per_period"]
+            })
         )
         layout.addRow("Періоди / Символ", periods_per_symbol)
 
@@ -153,7 +163,10 @@ class DataSourceModal(BaseModal):
         counts_per_period.setValue(self.values["counts_per_period"])
         counts_per_period.setRange(1, 20)
         counts_per_period.valueChanged.connect(
-            lambda a: self.values.update({"counts_per_period": a})
+            lambda a: self.values.update({
+                "counts_per_period": a,
+                "counts_per_symbol": a * self.values["periods_per_symbol"]
+            })
         )
         layout.addRow("Відліки / Період", counts_per_period)
 
@@ -232,18 +245,14 @@ class ReferenceDSModal(BaseModal):
     def __init__(self, config):
         super().__init__(config)
 
-    def _init_options(self):
-        """"""
-        id = qtw.QLineEdit()
-        id.setText(self.values["id"])
-        id.setPlaceholderText("ds_*")
-        id.textChanged.connect(
-            lambda a: self.values.update({"id": a})
-        )
-        self.options.append(["Ідентифікатор джерела сигналу", id])
-
 
 class CorrelatorModal(BaseModal):
+    """"""
+    def __init__(self, config):
+        super().__init__(config)
+
+
+class ClockGenModal(BaseModal):
     """"""
     def __init__(self, config):
         super().__init__(config)

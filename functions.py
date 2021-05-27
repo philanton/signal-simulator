@@ -6,10 +6,9 @@ import numpy as np
 
 def data_source_function(**params):
     """"""
-    params["bit"] = 0
     router = {
         0: lambda params=params: garmonic_signal(
-            bit=params["bit"],
+            bytes=params["bytes"],
             amp=params["amplitude"],
             freq=params["frequency"],
             phase=params["phase"],
@@ -17,7 +16,7 @@ def data_source_function(**params):
             steps=params["counts_per_period"]
         ),
         1: lambda params=params: manchester_code(
-            bit=params["bit"],
+            bytes=params["bytes"],
             amp=params["amplitude"],
             steps=params["counts_per_symbol"]
         )
@@ -58,13 +57,24 @@ def reference_ds_function(**params):
     return y if isinstance(y, list) else []
 
 
+def clock_gen_function(**params):
+    y = np.ones(params["total_counts"])
+
+    for i in range(params["total_counts"] // params["counts_per_symbol"]):
+        y[i * params["counts_per_symbol"]] = 0
+
+    return y
+
+
 def correlator_function(**params):
     """"""
-    y = list(accumulative_sum(
+    y = np.array(list(accumulative_sum(
         params["cl_values"],
         params["rds_values"],
+        params["cg_values"],
         params["delta_t"]
-    ))
+    )))
+    print(y)
 
     return y
 
@@ -101,29 +111,36 @@ def default_rds_with_time(**params):
     return t, y
 
 
-def garmonic_signal(bit, amp, freq, phase, periods, steps):
+def garmonic_signal(bytes, amp, freq, phase, periods, steps):
     """"""
     count = 0
-    counts = periods * steps
+    total_counts = counts = periods * steps
 
-    while count < counts:
-        t = count / freq / steps
-        y = amp * sin(2 * pi * freq * t + phase * pi) if bit else 0
-        yield t, y
-        count += 1
+    for bit in bytes:
+        bit = int(bit)
+        while count < total_counts:
+            t = count / freq / steps
+            y = amp * sin(2 * pi * freq * t + phase * pi) if bit else 0
+            yield t, y
+            count += 1
+        total_counts += counts
 
 
-def manchester_code(bit, amp, steps, sample_time=0.001):
+def manchester_code(bytes, amp, steps, sample_time=0.001):
     """"""
     count = 0
+    total_steps = steps
 
-    while count < steps:
-        t = count * sample_time
-        y = -amp if bit else amp
-        if count > steps / 2:
-            y *= -1
-        yield t, y
-        count += 1
+    for bit in bytes:
+        bit = int(bit)
+        while count < total_steps:
+            t = count * sample_time
+            y = -amp if bit else amp
+            if count > total_steps - steps / 2:
+                y *= -1
+            yield t, y
+            count += 1
+        total_steps += steps
 
 
 def white_noise(amp, steps):
@@ -144,11 +161,12 @@ def find_ds(this_block, source):
     return None
 
 
-def accumulative_sum(list_a, list_b, delta_t):
+def accumulative_sum(list_a, list_b, list_c, delta_t):
     """"""
     s = 0
-    for a, b in zip(list_a, list_b):
+    for a, b, c in zip(list_a, list_b, list_c):
         s += a * b * delta_t
+        s *= c
         yield s
 
 

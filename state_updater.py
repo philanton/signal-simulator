@@ -17,10 +17,11 @@ class StateUpdater():
 
     def init_system(self, block):
         """"""
+        find_all_blocks_in_system(self.store, block)
+
         for block in self.store.values():
             block.store.done = False
 
-        find_all_blocks_in_system(self.store, block)
         for stage in self.stages:
             try:
                 stage()
@@ -35,9 +36,9 @@ class StateUpdater():
                 block.store.values = y[:]
                 block.store.done = True
 
-        # for block in self.store.values():
-        #     plt.plot(block.store.times, block.store.values)
-        # plt.show()
+        for block in self.store.values():
+            plt.plot(block.store.times, block.store.values)
+        plt.show()
 
     def creating(self):
         """"""
@@ -75,16 +76,29 @@ class StateUpdater():
 
     def correlating(self):
         """"""
+        ds = self.store["DS"]
         rds = self.store["RDS"]
         cl = self.store["CL"]
+        cg = self.store["CG"]
         corr = self.store["Corr"]
 
-        rds.store.values = self.store["DS"].store.values[:]
+        args = ds.config["values"].copy()
+        args.update({"bytes": len(args["bytes"]) * "1"})
+        _, y = fn.data_source_function(**args)
+        rds.store.values = y[:]
         rds.store.done = True
+
+        args = {
+            "counts_per_symbol": ds.config["values"]["counts_per_symbol"],
+            "total_counts": len(cg.store.times)
+        }
+        y = fn.clock_gen_function(**args)
+        cg.store.values = y[:]
 
         args = {
             "cl_values": cl.store.values[:],
             "rds_values": rds.store.values[:],
+            "cg_values": cg.store.values[:],
             "delta_t": corr.store.times[1] - corr.store.times[0]
         }
         y = fn.correlator_function(**args)
@@ -99,10 +113,6 @@ class StateUpdater():
 def find_all_blocks_in_system(store, this_block):
     """"""
     store.update({this_block.config["abbr"]: this_block})
-
-    neighbor_abbrs = [block.config["abbr"] for block in this_block.neighbors]
-    dependencies = set(this_block.config["depends"])
-    this_block.store.done = dependencies.issubset(neighbor_abbrs)
 
     for block in this_block.neighbors:
         if block not in store.values():

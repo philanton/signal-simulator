@@ -2,6 +2,7 @@ from modals import (DataSourceModal,
                     InterferenceModal,
                     ConnectionLineModal,
                     CorrelatorModal,
+                    ClockGenModal,
                     ReferenceDSModal)
 
 blocks = [
@@ -11,7 +12,6 @@ blocks = [
         "abbr": "DS",
         "abbr-ua": "ДС",
         "allowed": ["CL"],
-        "depends": [],
         "modal": DataSourceModal,
         "values": {
             "type": 0,
@@ -21,7 +21,7 @@ blocks = [
             "periods_per_symbol": 5,
             "counts_per_period": 10,
             "counts_per_symbol": 50,
-            "length": 2
+            "bytes": "10"
         }
     },
     {
@@ -30,7 +30,6 @@ blocks = [
         "abbr": "CL",
         "abbr-ua": "ЛЗ",
         "allowed": ["DS", "Infr", "Corr"],
-        "depends": ["DS", "Infr"],
         "modal": ConnectionLineModal,
         "values": {
             "infr_coef": 0.3,
@@ -44,7 +43,6 @@ blocks = [
         "abbr": "Infr",
         "abbr-ua": "Звд",
         "allowed": ["CL"],
-        "depends": [],
         "modal": InterferenceModal,
         "values": {
             "type": 0,
@@ -57,9 +55,19 @@ blocks = [
         "description": "",
         "abbr": "Corr",
         "abbr-ua": "Корр",
-        "allowed": ["CL", "RDS", "DD"],
-        "depends": ["CL", "RDS"],
+        "allowed": ["CL", "CG", "RDS", "DD"],
         "modal": CorrelatorModal,
+        "values": {
+            "counts_per_symbol": 50
+        }
+    },
+    {
+        "name": "Тактовий генератор",
+        "description": "",
+        "abbr": "CG",
+        "abbr-ua": "ТГ",
+        "allowed": ["Corr"],
+        "modal": ClockGenModal,
         "values": {
             "counts_per_symbol": 50
         }
@@ -70,7 +78,6 @@ blocks = [
         "abbr": "RDS",
         "abbr-ua": "ДЕС",
         "allowed": ["Corr"],
-        "depends": [],
         "modal": ReferenceDSModal,
         "values": {
             "id": ""
@@ -82,7 +89,6 @@ blocks = [
         "abbr": "PDS",
         "abbr-ua": "ДОС",
         "allowed": ["DD"],
-        "depends": [],
         "values": {
             "pivot_signal_level": 4
         }
@@ -93,7 +99,6 @@ blocks = [
         "abbr": "DD",
         "abbr-ua": "ППР",
         "allowed": ["Corr", "PDS"],
-        "depends": ["Corr", "PDS"],
         "values": {
             "pivot_signal_level": 4
         }

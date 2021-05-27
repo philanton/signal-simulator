@@ -171,7 +171,7 @@ class BlockManager():
                 c_block.allowed_neighbors.remove(block.config["abbr"])
                 c_block.neighbors.append(block)
 
-        c_block.update_state()
+            c_block.update_state()
 
     def check_neighbours(self, name, pos):
         """"""
