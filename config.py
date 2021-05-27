@@ -3,7 +3,9 @@ from modals import (DataSourceModal,
                     ConnectionLineModal,
                     CorrelatorModal,
                     ClockGenModal,
-                    ReferenceDSModal)
+                    ReferenceDSModal,
+                    PivotDSModal,
+                    DecisionDeviceModal)
 
 blocks = [
     {
@@ -33,7 +35,7 @@ blocks = [
         "modal": ConnectionLineModal,
         "values": {
             "infr_coef": 0.3,
-            "signal_coef": 0.7,
+            "signal_coef": 1,
             "counts_per_symbol": 50
         }
     },
@@ -80,7 +82,8 @@ blocks = [
         "allowed": ["Corr"],
         "modal": ReferenceDSModal,
         "values": {
-            "id": ""
+            "id": "",
+            "counts_per_symbol": 50
         }
     },
     {
@@ -89,8 +92,9 @@ blocks = [
         "abbr": "PDS",
         "abbr-ua": "ДОС",
         "allowed": ["DD"],
+        "modal": PivotDSModal,
         "values": {
-            "pivot_signal_level": 4
+            "pivot_signal_level": 70
         }
     },
     {
@@ -99,8 +103,9 @@ blocks = [
         "abbr": "DD",
         "abbr-ua": "ППР",
         "allowed": ["Corr", "PDS"],
+        "modal": DecisionDeviceModal,
         "values": {
-            "pivot_signal_level": 4
+            "received_message": ""
         }
     }
 ]

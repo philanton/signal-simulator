@@ -74,7 +74,17 @@ def correlator_function(**params):
         params["cg_values"],
         params["delta_t"]
     )))
-    print(y)
+
+    return y
+
+
+def decision_device_function(**params):
+    """"""
+    correlated = params["corr_values"]
+    symbol_count = params["symbol_count"]
+    
+    symbols_encoded = np.split(correlated, symbol_count)
+    y = [np.sum(enc > 0) - np.sum(enc <= 0) for enc in symbols_encoded]
 
     return y
 

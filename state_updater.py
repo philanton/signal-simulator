@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 import functions as fn
 
@@ -94,6 +95,7 @@ class StateUpdater():
         }
         y = fn.clock_gen_function(**args)
         cg.store.values = y[:]
+        cg.store.done = True
 
         args = {
             "cl_values": cl.store.values[:],
@@ -107,7 +109,34 @@ class StateUpdater():
 
     def decisioning(self):
         """"""
-        pass
+        corr = self.store["Corr"]
+        ds = self.store["DS"]
+        pds = self.store["PDS"]
+        dd = self.store["DD"]
+
+        args = {
+            "corr_values": corr.store.values[:],
+            "symbol_count": len(ds.config["values"]["bytes"])
+        }
+        values = fn.decision_device_function(**args)
+        counts_per_symbol = len(dd.store.times) // args["symbol_count"]
+        y = np.concatenate([np.full(counts_per_symbol, val) for val in values])
+        dd.store.values = y[:]
+        dd.store.done = True
+
+        pivot_value = pds.config["values"]["pivot_signal_level"]
+        bit_arr = []
+        threshold = counts_per_symbol * pivot_value / 100
+        for val in values:
+            if val > threshold:
+                bit_arr.append("1")
+            elif val < -threshold:
+                bit_arr.append("0")
+            else:
+                bit_arr.append("?")
+        bits_decoded = "".join(bit_arr)
+
+        dd.config["values"]["received_message"] = bits_decoded
 
 
 def find_all_blocks_in_system(store, this_block):

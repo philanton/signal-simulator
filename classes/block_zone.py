@@ -187,8 +187,6 @@ class BlockManager():
             elif d == 3:
                 if name in block.allowed_neighbors:
                     valid.append(block)
-                else:
-                    not_valid.append(block)
 
         return valid, not_valid
 

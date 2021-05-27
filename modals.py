@@ -223,8 +223,8 @@ class ConnectionLineModal(BaseModal):
         """"""
         signal_coef = qtw.QDoubleSpinBox()
         signal_coef.setValue(self.values["signal_coef"])
-        signal_coef.setRange(0, 1)
-        signal_coef.setSingleStep(0.05)
+        signal_coef.setRange(0, 5)
+        signal_coef.setSingleStep(0.1)
         signal_coef.valueChanged.connect(
             lambda a: self.values.update({"signal_coef": a})
         )
@@ -232,8 +232,8 @@ class ConnectionLineModal(BaseModal):
 
         infr_coef = qtw.QDoubleSpinBox()
         infr_coef.setValue(self.values["infr_coef"])
-        infr_coef.setRange(0, 1)
-        infr_coef.setSingleStep(0.05)
+        infr_coef.setRange(0, 5)
+        infr_coef.setSingleStep(0.1)
         infr_coef.valueChanged.connect(
             lambda a: self.values.update({"infr_coef": a})
         )
@@ -256,3 +256,32 @@ class ClockGenModal(BaseModal):
     """"""
     def __init__(self, config):
         super().__init__(config)
+
+
+class DecisionDeviceModal(BaseModal):
+    """"""
+    def __init__(self, config):
+        super().__init__(config)
+
+    def _init_options(self):
+        """"""
+        received_message = qtw.QLineEdit()
+        received_message.setText(self.values["received_message"])
+        received_message.setReadOnly(True)
+        self.options.append(["Прийняте повідомлення", received_message])
+
+
+class PivotDSModal(BaseModal):
+    """"""
+    def __init__(self, config):
+        super().__init__(config)
+
+    def _init_options(self):
+        """"""
+        pivot_signal_level = qtw.QSpinBox()
+        pivot_signal_level.setValue(self.values["amplitude"])
+        pivot_signal_level.setRange(0, 100)
+        pivot_signal_level.valueChanged.connect(
+            lambda a: self.values.update({"pivot_signal_level": a})
+        )
+        self.options.append(["Величина опорного сигналу, %", pivot_signal_level])
