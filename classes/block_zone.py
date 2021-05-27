@@ -173,6 +173,8 @@ class BlockManager():
 
             c_block.update_state()
 
+        self.parent.block_state_notifier.notify_all()
+
     def check_neighbours(self, name, pos):
         """"""
         c_x, c_y = self.parent.index_hint(pos)
@@ -210,7 +212,6 @@ class GridBlockView(BlockView):
             []
         )
         self.parent().block_state_notifier.add_state(self.store)
-        self.parent().block_state_notifier.notify_all()
 
         self.init_gui()
         tip = "{}: {}".format(self.config["name"], self.config["id"])
@@ -223,6 +224,7 @@ class GridBlockView(BlockView):
         if modal.exec_():
             self.config.update({"values": modal.values})
             self.update_state()
+            self.parent().block_state_notifier.notify_all()
 
     def mouseMoveEvent(self, e):
         """Event for dragging out block to the Block Zone"""

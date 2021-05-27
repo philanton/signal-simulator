@@ -40,7 +40,7 @@ class ElementList(BaseWidget):
             qtg.QPalette.Window: qtg.QColor("#88D9E6")
         })
 
-    def update_list(self, *states):
+    def update_list(self, *states, concrete=[]):
         last_states = set(self.block_states.keys())
         states = set(states)
 
@@ -48,12 +48,18 @@ class ElementList(BaseWidget):
         added = states.difference(last_states)
 
         for state in deleted:
-            self.block_states.pop(state).setParent(None)
+            list_item = self.block_states.pop(state)
+            self.element_state_notifier.remove_state(list_item.get_state().id)
+            list_item.setParent(None)
 
         for state in added:
             list_item = ElementListRow(state)
+            list_item.set_updater(self.element_state_notifier.notify_all)
+            self.element_state_notifier.add_state(list_item.get_state())
             self.block_states[state] = list_item
             self._layout.insertWidget(len(last_states) + 1, list_item)
+
+        self.element_state_notifier.notify_all(concrete=)
 
 
 class ElementListRow(BaseWidget):
@@ -61,11 +67,11 @@ class ElementListRow(BaseWidget):
     def __init__(self, block_state=None, is_header=False, parent=None):
         super().__init__(parent)
         self.is_header = is_header
-        self.block_state = block_state
+        self.updater = lambda concrete=[]: a
         if not is_header:
+            self.name_ukr = block_state.name
             self.element_state = ElementStore(
                 block_state.id,
-                block_state.done,
                 block_state.values,
                 block_state.times,
                 qtg.QColor(*[randint(0, 256) for a in [0] * 3]),
@@ -82,8 +88,8 @@ class ElementListRow(BaseWidget):
             items.append(CellLabel(60, "Колір", bgcolor="#8B8BAE"))
             items.append(CellLabel(45, "Показ", bgcolor="#8B8BAE"))
         else:
-            items.append(CellLabel(45, self.block_state.id))
-            items.append(CellLabel(110, self.block_state.name))
+            items.append(CellLabel(45, self.element_state.id))
+            items.append(CellLabel(110, self.name_ukr))
             items.append(CellColourPicker(60, self.element_state))
             items.append(CellCheckBox(45, self.element_state))
 
@@ -93,6 +99,14 @@ class ElementListRow(BaseWidget):
             margins=(1, 1, 1, 1),
             spacing=2
         )
+
+    def get_state(self):
+        """"""
+        return self.element_state
+
+    def set_updater(self, updater):
+        """"""
+        self.updater = updater
 
 
 class CellLabel(BaseLabel):
@@ -144,6 +158,7 @@ class CellCheckBox(BaseWidget):
 
     def change_state(self, num):
         self.state.show = bool(num)
+        self.parent().updater(concrete=[self.state.id])
 
 
 class CellColourPicker(BaseWidget):
@@ -189,3 +204,4 @@ class CellColourPicker(BaseWidget):
         self.picker.setPalette(self.color_palette)
 
         self.state.color = color
+        self.parent().updater(concrete=[self.state.id])

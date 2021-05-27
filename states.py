@@ -6,28 +6,33 @@ from PySide6.QtGui import QColor
 class StateNotifier():
     """"""
     def __init__(self):
-        self._states = []
+        self._states = {}
         self._observers = []
 
     def add_state(self, state):
-        self._states.append(state)
+        """"""
+        self._states[state.id] = state
 
     def remove_state(self, id):
-        i = [i for i, state in enumerate(self._states) if state.id == id][0]
-        self._states.pop(i)
+        """"""
+        return self._states.pop(id)
 
     def get_states(self):
-        return self._states[:]
+        """"""
+        return self._states.values()
 
     def get_state(self, id):
-        return [state for state in self._states if state.id == id][0]
+        """"""
+        return self._states.get(id, None)
 
     def add_observer(self, func):
+        """"""
         self._observers.append(func)
 
-    def notify_all(self):
+    def notify_all(self, concrete=[]):
+        """"""
         for func in self._observers:
-            func(*self._states)
+            func(*self._states.values(), concrete=concrete)
 
 
 @dataclass
@@ -45,7 +50,6 @@ class BlockStore:
 @dataclass
 class ElementStore:
     id: str
-    done: bool
     values: list
     times: list
     color: QColor
