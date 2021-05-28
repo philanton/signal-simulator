@@ -1,6 +1,5 @@
 from math import sin, pi
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -82,9 +81,10 @@ def decision_device_function(**params):
     """"""
     correlated = params["corr_values"]
     symbol_count = params["symbol_count"]
-    
+
     symbols_encoded = np.split(correlated, symbol_count)
-    y = [np.sum(enc > 0) - np.sum(enc <= 0) for enc in symbols_encoded]
+    diff = [enc[1:] - enc[:-1] for enc in symbols_encoded]
+    y = [np.sum(delta > 0) - np.sum(delta < 0) for delta in diff]
 
     return y
 
@@ -130,7 +130,7 @@ def garmonic_signal(bytes, amp, freq, phase, periods, steps):
         bit = int(bit)
         while count < total_counts:
             t = count / freq / steps
-            y = amp * sin(2 * pi * freq * t + phase * pi) if bit else 0
+            y = amp * sin(2 * pi * freq * t + (phase == bit)* pi)
             yield t, y
             count += 1
         total_counts += counts
@@ -155,7 +155,7 @@ def manchester_code(bytes, amp, steps, sample_time=0.001):
 
 def white_noise(amp, steps):
     """"""
-    return np.random.normal(0, amp / 2.355, size=steps)
+    return np.random.normal(0, amp / 1.5, size=steps)
 
 
 def find_ds(this_block, source):

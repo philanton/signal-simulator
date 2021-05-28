@@ -17,6 +17,7 @@ class BaseModal(qtw.QDialog, BaseWidget):
         self._init_options()
         self.init_gui()
 
+        self.setWindowIcon(qtg.QIcon("img/app-block.png"))
         self.setWindowTitle(
             "Настройка параметрів: {}".format(self.name)
         )
@@ -106,13 +107,6 @@ class DataSourceModal(BaseModal):
             lambda a: self.values.update({"bytes": a})
         )
         self.options.append(["Символи для передачі", bytes])
-        # length = qtw.QSpinBox()
-        # length.setValue(self.values["length"])
-        # length.setRange(1, 20)
-        # length.valueChanged.connect(
-        #     lambda a: self.values.update({"length": a})
-        # )
-        # self.options.append(["Кількість символів", length])
 
     def __type_changed(self, i):
         """"""
@@ -120,6 +114,9 @@ class DataSourceModal(BaseModal):
             return
 
         if i == 0:
+            cp = self.values["counts_per_period"]
+            ps = self.values["periods_per_symbol"]
+            self.values["counts_per_period"] = cp * ps
             self.inner_form_a.show()
             self.inner_form_b.hide()
         else:
@@ -150,7 +147,7 @@ class DataSourceModal(BaseModal):
 
         periods_per_symbol = qtw.QSpinBox()
         periods_per_symbol.setValue(self.values["periods_per_symbol"])
-        periods_per_symbol.setRange(1, 20)
+        periods_per_symbol.setRange(1, 10)
         periods_per_symbol.valueChanged.connect(
             lambda a: self.values.update({
                 "periods_per_symbol": a,
@@ -161,7 +158,7 @@ class DataSourceModal(BaseModal):
 
         counts_per_period = qtw.QSpinBox()
         counts_per_period.setValue(self.values["counts_per_period"])
-        counts_per_period.setRange(1, 20)
+        counts_per_period.setRange(1, 50)
         counts_per_period.valueChanged.connect(
             lambda a: self.values.update({
                 "counts_per_period": a,
@@ -279,7 +276,7 @@ class PivotDSModal(BaseModal):
     def _init_options(self):
         """"""
         pivot_signal_level = qtw.QSpinBox()
-        pivot_signal_level.setValue(self.values["amplitude"])
+        pivot_signal_level.setValue(self.values["pivot_signal_level"])
         pivot_signal_level.setRange(0, 100)
         pivot_signal_level.valueChanged.connect(
             lambda a: self.values.update({"pivot_signal_level": a})

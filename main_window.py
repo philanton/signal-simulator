@@ -16,6 +16,8 @@ class MainWindow(qtw.QMainWindow):
         self.setCentralWidget(self.central_widget)
 
         self.setMinimumSize(720, 480)
+        self.setWindowIcon(qtg.QIcon("img/app-block.png"))
+        self.setWindowTitle("Симулятор передачі даних")
         self.show()
 
 

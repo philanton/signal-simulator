@@ -18,6 +18,7 @@ flake8-black = "^0.2.1"
 snoop = "^0.3.0"
 matplotlib = "^3.4.2"
 colorednoise = "^1.1.1"
+pyinstaller = "^4.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
