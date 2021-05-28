@@ -37,10 +37,6 @@ class StateUpdater():
                 block.store.values = y[:]
                 block.store.done = True
 
-        for block in self.store.values():
-            plt.plot(block.store.times, block.store.values)
-        plt.show()
-
     def creating(self):
         """"""
         ds = self.store["DS"]

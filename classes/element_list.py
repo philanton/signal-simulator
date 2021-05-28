@@ -46,11 +46,17 @@ class ElementList(BaseWidget):
 
         deleted = last_states.difference(states)
         added = states.difference(last_states)
+        common = states.intersection(last_states)
 
         for state in deleted:
             list_item = self.block_states.pop(state)
             self.element_state_notifier.remove_state(list_item.get_state().id)
             list_item.setParent(None)
+
+        for state in common:
+            element_state = self.block_states[state].get_state()
+            element_state.times = state.times
+            element_state.values = state.values
 
         for state in added:
             list_item = ElementListRow(state)
@@ -59,7 +65,7 @@ class ElementList(BaseWidget):
             self.block_states[state] = list_item
             self._layout.insertWidget(len(last_states) + 1, list_item)
 
-        self.element_state_notifier.notify_all(concrete=)
+        self.element_state_notifier.notify_all()
 
 
 class ElementListRow(BaseWidget):
@@ -83,15 +89,15 @@ class ElementListRow(BaseWidget):
         """Separate function for GUI initialization"""
         items = []
         if self.is_header:
-            items.append(CellLabel(45, "ID", bgcolor="#8B8BAE"))
-            items.append(CellLabel(110, "Ім'я", bgcolor="#8B8BAE"))
-            items.append(CellLabel(60, "Колір", bgcolor="#8B8BAE"))
-            items.append(CellLabel(45, "Показ", bgcolor="#8B8BAE"))
+            items.append(CellLabel(55, "ID", bgcolor="#8B8BAE"))
+            items.append(CellLabel(120, "Ім'я", bgcolor="#8B8BAE"))
+            items.append(CellLabel(70, "Колір", bgcolor="#8B8BAE"))
+            items.append(CellLabel(55, "Показ", bgcolor="#8B8BAE"))
         else:
-            items.append(CellLabel(45, self.element_state.id))
-            items.append(CellLabel(110, self.name_ukr))
-            items.append(CellColourPicker(60, self.element_state))
-            items.append(CellCheckBox(45, self.element_state))
+            items.append(CellLabel(55, self.element_state.id))
+            items.append(CellLabel(120, self.name_ukr))
+            items.append(CellColourPicker(70, self.element_state))
+            items.append(CellCheckBox(55, self.element_state))
 
         self._init_layout(
             items,
@@ -123,12 +129,12 @@ class CellLabel(BaseLabel):
         self.setFixedWidth(self.width)
         self.setMargin(3)
 
-        self._init_font()
+        self._init_font(is_bold=True)
         self.setWordWrap(True)
 
         self._init_palette({
             qtg.QPalette.Window: qtg.QColor(self.bgcolor),
-            qtg.QPalette.WindowText: qtg.QColor("#88D9E6")
+            qtg.QPalette.WindowText: qtg.QColor("#374B4A")
         })
 
 

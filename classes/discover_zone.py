@@ -17,7 +17,7 @@ class DiscoverZone(BaseWidget):
 
     def init_gui(self):
         """Separate function for GUI initialization"""
-        self._init_sizing(width=300)
+        self._init_sizing(width=350)
 
         self.element_state_notifier = StateNotifier()
         monitor = Monitor(self.element_state_notifier)
