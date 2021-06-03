@@ -1,7 +1,7 @@
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 
-from classes.basewidgets import BaseLabel, BaseWidget
+from classes.basewidgets import DescriptionLabel, BaseWidget
 
 
 class BaseModal(qtw.QDialog, BaseWidget):
@@ -30,7 +30,7 @@ class BaseModal(qtw.QDialog, BaseWidget):
         self.form = self._init_form()
         self._init_layout(
             [
-                BaseLabel(self.description, self),
+                DescriptionLabel(self.description),
                 self.form,
                 self.buttonBox
             ],

@@ -110,6 +110,22 @@ class BaseLabel(qtw.QLabel):
         self.setFont(font)
 
 
+class DescriptionLabel(BaseLabel):
+    """"""
+    def __init__(self, text):
+        super().__init__(text, parent=None)
+        self.init_gui()
+
+    def init_gui(self):
+        """"""
+        super().init_gui()
+
+        self.setWordWrap(True)
+        self.setIndent(5)
+        self.setMargin(5)
+        self._init_font(size=10)
+
+
 class BlockLabel(BaseLabel):
     """
     Label class for blocks
