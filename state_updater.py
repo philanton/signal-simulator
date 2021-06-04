@@ -85,7 +85,7 @@ class StateUpdater():
         rds.store.done = True
 
         args = {
-            "counts_per_symbol": ds.config["values"]["counts_per_symbol"],
+            "symbol_count": len(ds.config["values"]["bytes"]),
             "total_counts": len(cg.store.times)
         }
         y = fn.clock_gen_function(**args)
@@ -106,7 +106,7 @@ class StateUpdater():
         """"""
         corr = self.store["Corr"]
         ds = self.store["DS"]
-        pds = self.store["PDS"]
+        pds = self.store.get("PDS")
         dd = self.store["DD"]
 
         args = {
@@ -119,13 +119,12 @@ class StateUpdater():
         dd.store.values = y[:]
         dd.store.done = True
 
-        pivot_value = pds.config["values"]["pivot_signal_level"]
+        pivot_value = pds.config["values"]["pivot_signal_level"] if pds else 0
         bit_arr = []
-        threshold = counts_per_symbol * pivot_value / 100
         for val in values:
-            if val > threshold:
+            if val > pivot_value:
                 bit_arr.append("1")
-            elif val < -threshold:
+            elif val < -pivot_value:
                 bit_arr.append("0")
             else:
                 bit_arr.append("?")

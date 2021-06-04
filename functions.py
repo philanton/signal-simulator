@@ -59,9 +59,8 @@ def reference_ds_function(**params):
 def clock_gen_function(**params):
     y = np.ones(params["total_counts"])
 
-    for i in range(params["total_counts"] // params["counts_per_symbol"]):
-        y[i * params["counts_per_symbol"]] = 0
-
+    for i in range(params["symbol_count"]):
+        y[i * params["total_counts"] // params["symbol_count"]] = 0
     return y
 
 
@@ -84,7 +83,8 @@ def decision_device_function(**params):
 
     symbols_encoded = np.split(correlated, symbol_count)
     diff = [enc[1:] - enc[:-1] for enc in symbols_encoded]
-    y = [np.sum(delta > 0) - np.sum(delta < 0) for delta in diff]
+    values = [np.sum(delta > 0) - np.sum(delta < 0) for delta in diff]
+    y = np.array(values) * 100 * symbol_count / len(correlated)
 
     return y
 
@@ -136,7 +136,7 @@ def garmonic_signal(bytes, amp, freq, phase, periods, steps):
         total_counts += counts
 
 
-def manchester_code(bytes, amp, steps, sample_time=0.001):
+def manchester_code(bytes, amp, steps, sample_time=0.05):
     """"""
     count = 0
     total_steps = steps
@@ -155,7 +155,7 @@ def manchester_code(bytes, amp, steps, sample_time=0.001):
 
 def white_noise(amp, steps):
     """"""
-    return np.random.normal(0, amp / 1.5, size=steps)
+    return np.random.normal(0, amp / 1.6, size=steps)
 
 
 def find_ds(this_block, source):

@@ -89,7 +89,7 @@ class DataSourceModal(BaseModal):
         amplitude.valueChanged.connect(
             lambda a: self.values.update({"amplitude": a})
         )
-        self.options.append(["Амплітуда", amplitude])
+        self.options.append(["Амплітуда (В)", amplitude])
 
         self.__init_form_analog()
         self.__init_form_discrete()
@@ -135,7 +135,7 @@ class DataSourceModal(BaseModal):
         phase.stateChanged.connect(
             lambda a: self.values.update({"phase": bool(a)})
         )
-        layout.addRow("Зворотній", phase)
+        layout.addRow("Зворотній (+180)", phase)
 
         frequency = qtw.QDoubleSpinBox()
         frequency.setValue(self.values["frequency"])
@@ -143,7 +143,7 @@ class DataSourceModal(BaseModal):
         frequency.valueChanged.connect(
             lambda a: self.values.update({"frequency": a})
         )
-        layout.addRow("Частота", frequency)
+        layout.addRow("Частота (Гц)", frequency)
 
         periods_per_symbol = qtw.QSpinBox()
         periods_per_symbol.setValue(self.values["periods_per_symbol"])
@@ -193,7 +193,7 @@ class InterferenceModal(BaseModal):
 
     def _init_options(self):
         """"""
-        variations = ["Білий шум", "Сірий шум", "Імпульсна завада"]
+        variations = ["Білий шум"]
         combo_box = qtw.QComboBox()
         combo_box.addItems(variations)
         combo_box.setCurrentIndex(self.values["type"])
@@ -208,7 +208,7 @@ class InterferenceModal(BaseModal):
         amplitude.valueChanged.connect(
             lambda a: self.values.update({"amplitude": a})
         )
-        self.options.append(["Амплітуда", amplitude])
+        self.options.append(["Амплітуда (В)", amplitude])
 
 
 class ConnectionLineModal(BaseModal):
@@ -281,4 +281,4 @@ class PivotDSModal(BaseModal):
         pivot_signal_level.valueChanged.connect(
             lambda a: self.values.update({"pivot_signal_level": a})
         )
-        self.options.append(["Величина опорного сигналу, %", pivot_signal_level])
+        self.options.append(["Величина опорного сигналу (%)", pivot_signal_level])
